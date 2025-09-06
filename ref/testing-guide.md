@@ -2,7 +2,7 @@
 
 ## テスト戦略
 
-sacloud-update は**ゴールデンファイルテスト**を採用し、変換結果の一貫性を保証します。
+usacloud-update は**ゴールデンファイルテスト**を採用し、変換結果の一貫性を保証します。
 
 ## テストファイル構成
 
@@ -175,7 +175,7 @@ func TestSpecificRule(t *testing.T) {
         expected string
         changed  bool
     }{
-        {"matching pattern", "replacement # sacloud-update: test reason (https://example.com)", true},
+        {"matching pattern", "replacement # usacloud-update: test reason (https://example.com)", true},
         {"no match", "no match", false},
     }
     
@@ -244,7 +244,7 @@ make verify-sample
 
 1. **統計出力の活用**:
    ```bash
-   ./bin/sacloud-update --in testdata/sample_v0_v1_mixed.sh --stats
+   ./bin/usacloud-update --in testdata/sample_v0_v1_mixed.sh --stats
    ```
 
 2. **中間結果の確認**:

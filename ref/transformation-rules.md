@@ -2,7 +2,7 @@
 
 ## 概要
 
-sacloud-update は usacloud v0.x から v1.1 への移行を自動化するため、9つのカテゴリの変換ルールを適用します。各ルールは公式ドキュメントへの参照と共に、説明的なコメントを自動付与します。
+usacloud-update は usacloud v0.x から v1.1 への移行を自動化するため、9つのカテゴリの変換ルールを適用します。各ルールは公式ドキュメントへの参照と共に、説明的なコメントを自動付与します。
 
 ## ルール一覧
 
@@ -24,7 +24,7 @@ sacloud-update は usacloud v0.x から v1.1 への移行を自動化するた�
 usacloud server list --output-type=csv
 
 # 変換後  
-usacloud server list --output-type=json # sacloud-update: v1.0でcsv/tsvは廃止。jsonに置換し、必要なら --query/jq を利用してください
+usacloud server list --output-type=json # usacloud-update: v1.0でcsv/tsvは廃止。jsonに置換し、必要なら --query/jq を利用してください
 ```
 
 ### 2. セレクタの引数化
@@ -45,7 +45,7 @@ usacloud server list --output-type=json # sacloud-update: v1.0でcsv/tsvは廃�
 usacloud disk read --selector name=mydisk
 
 # 変換後
-usacloud disk read mydisk # sacloud-update: --selectorはv1で廃止。ID/名称/タグをコマンド引数に指定する仕様へ移行
+usacloud disk read mydisk # usacloud-update: --selectorはv1で廃止。ID/名称/タグをコマンド引数に指定する仕様へ移行
 ```
 
 ### 3-5. リソース名の統一
@@ -80,7 +80,7 @@ usacloud disk read mydisk # sacloud-update: --selectorはv1で廃止。ID/名称
 usacloud product-disk list
 
 # 変換後
-usacloud disk-plan list # sacloud-update: v1系では *-plan へ名称統一
+usacloud disk-plan list # usacloud-update: v1系では *-plan へ名称統一
 ```
 
 ### 7. 廃止コマンドの処理
@@ -95,7 +95,7 @@ usacloud disk-plan list # sacloud-update: v1系では *-plan へ名称統一
 usacloud summary
 
 # 変換後  
-# usacloud summary # sacloud-update: summaryコマンドはv1で廃止。要件に応じて bill/self/各list か rest を利用してください
+# usacloud summary # usacloud-update: summaryコマンドはv1で廃止。要件に応じて bill/self/各list か rest を利用してください
 ```
 
 ### 8. オブジェクトストレージの非対応
@@ -127,12 +127,12 @@ usacloud summary
 各変換には以下の形式のコメントが自動付与されます:
 
 ```
-# sacloud-update: [変更理由] ([公式ドキュメントURL])
+# usacloud-update: [変更理由] ([公式ドキュメントURL])
 ```
 
 ### 重複処理の防止
 
-既に `# sacloud-update:` コメントが含まれる行には追加コメントを付与しません。
+既に `# usacloud-update:` コメントが含まれる行には追加コメントを付与しません。
 
 ## 変換例
 
@@ -164,27 +164,27 @@ usacloud summary
 ### 変換後出力 (`testdata/expected_v1_1.sh`)
 
 ```bash
-# Updated for usacloud v1.1 by sacloud-update — DO NOT EDIT ABOVE THIS LINE
+# Updated for usacloud v1.1 by usacloud-update — DO NOT EDIT ABOVE THIS LINE
 #!/usr/bin/env bash
 set -euo pipefail
 
 # v0風: csv/tsv
-usacloud server list --output-type=json # sacloud-update: v1.0でcsv/tsvは廃止。jsonに置換し、必要なら --query/jq を利用してください (https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/)
+usacloud server list --output-type=json # usacloud-update: v1.0でcsv/tsvは廃止。jsonに置換し、必要なら --query/jq を利用してください (https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/)
 
 # v0風: selector
-usacloud disk read mydisk # sacloud-update: --selectorはv1で廃止。ID/名称/タグをコマンド引数に指定する仕様へ移行 (https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/)
-usacloud server delete to-be-removed # sacloud-update: --selectorはv1で廃止。ID/名称/タグをコマンド引数に指定する仕様へ移行 (https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/)
+usacloud disk read mydisk # usacloud-update: --selectorはv1で廃止。ID/名称/タグをコマンド引数に指定する仕様へ移行 (https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/)
+usacloud server delete to-be-removed # usacloud-update: --selectorはv1で廃止。ID/名称/タグをコマンド引数に指定する仕様へ移行 (https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/)
 
 # v0風: リソース名  
-usacloud cdrom list # sacloud-update: v1ではリソース名がcdromに統一 (https://manual.sakura.ad.jp/cloud-api/1.1/cdrom/index.html)
-usacloud note list # sacloud-update: v1ではstartup-scriptはnoteに統一 (https://docs.usacloud.jp/usacloud/)
-usacloud ipaddress read --zone tk1a --ipaddress 203.0.113.10 # sacloud-update: v1ではIPv4関連はipaddressに整理 (https://docs.usacloud.jp/usacloud/references/ipaddress/)
+usacloud cdrom list # usacloud-update: v1ではリソース名がcdromに統一 (https://manual.sakura.ad.jp/cloud-api/1.1/cdrom/index.html)
+usacloud note list # usacloud-update: v1ではstartup-scriptはnoteに統一 (https://docs.usacloud.jp/usacloud/)
+usacloud ipaddress read --zone tk1a --ipaddress 203.0.113.10 # usacloud-update: v1ではIPv4関連はipaddressに整理 (https://docs.usacloud.jp/usacloud/references/ipaddress/)
 
 # v0: product-*
-usacloud disk-plan list # sacloud-update: v1系では *-plan へ名称統一 (https://docs.usacloud.jp/usacloud/)
+usacloud disk-plan list # usacloud-update: v1系では *-plan へ名称統一 (https://docs.usacloud.jp/usacloud/)
 
 # 廃止コマンド
-# usacloud summary # sacloud-update: summaryコマンドはv1で廃止。要件に応じて bill/self/各list か rest を利用してください (https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/)
+# usacloud summary # usacloud-update: summaryコマンドはv1で廃止。要件に応じて bill/self/各list か rest を利用してください (https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/)
 ```
 
 ## 新しいルールの追加方法

@@ -37,7 +37,5 @@ go.work.sum
 # .vscode/
 
 CLAUDE.md
-CLAUDE*.
-*.claude
-*.claude.*
+*.claude/*.local.*
 *.swp

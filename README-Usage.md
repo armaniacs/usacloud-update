@@ -1,8 +1,8 @@
-# sacloud-update 使用ガイド
+# usacloud-update 使用ガイド
 
 ## 概要
 
-`sacloud-update` は、usacloud のバージョン v0、v1.0、v1.1 の記述が混在した bash スクリプトを、v1.1 で動作するように自動変換するツールです。
+`usacloud-update` は、usacloud のバージョン v0、v1.0、v1.1 の記述が混在した bash スクリプトを、v1.1 で動作するように自動変換するツールです。
 
 廃止されたオプション、変更されたリソース名、新しいコマンド引数形式などを自動で更新し、変換できない箇所は適切なコメントと共に手動対応を促します。
 
@@ -12,14 +12,14 @@
 
 ```bash
 # リポジトリをクローン
-git clone https://github.com/armaniacs/usacloud-update.git
-cd usacloud-update
+git clone https://github.com/armaniacs/uusacloud-update.git
+cd uusacloud-update
 
 # ビルド
 make build
 
 # バイナリの確認
-./bin/sacloud-update --help
+./bin/usacloud-update --help
 ```
 
 ### 動作確認
@@ -37,7 +37,7 @@ make verify-sample
 ### コマンドライン形式
 
 ```bash
-sacloud-update [オプション]
+usacloud-update [オプション]
 ```
 
 ### オプション
@@ -54,30 +54,30 @@ sacloud-update [オプション]
 
 ```bash
 # パイプライン
-cat input.sh | sacloud-update > output.sh
+cat input.sh | usacloud-update > output.sh
 
 # リダイレクト
-sacloud-update < input.sh > output.sh
+usacloud-update < input.sh > output.sh
 ```
 
 #### 2. ファイルを直接指定
 
 ```bash
 # ファイル間変換
-sacloud-update --in input.sh --out output.sh
+usacloud-update --in input.sh --out output.sh
 
 # 統計出力を無効化
-sacloud-update --in input.sh --out output.sh --stats=false
+usacloud-update --in input.sh --out output.sh --stats=false
 ```
 
 #### 3. 確認しながら実行
 
 ```bash
 # 統計のみを確認（出力は破棄）
-sacloud-update --in script.sh --out /dev/null
+usacloud-update --in script.sh --out /dev/null
 
 # 統計と出力の両方を確認
-sacloud-update --in script.sh --out updated_script.sh
+usacloud-update --in script.sh --out updated_script.sh
 ```
 
 ## 変換例
@@ -116,33 +116,33 @@ usacloud server list --zone = all
 ### 変換後の出力
 
 ```bash
-# Updated for usacloud v1.1 by sacloud-update — DO NOT EDIT ABOVE THIS LINE
+# Updated for usacloud v1.1 by usacloud-update — DO NOT EDIT ABOVE THIS LINE
 #!/usr/bin/env bash
 set -euo pipefail
 
 # 古い出力形式
-usacloud server list --output-type=json # sacloud-update: v1.0でcsv/tsvは廃止。jsonに置換し、必要なら --query/jq を利用してください (https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/)
+usacloud server list --output-type=json # usacloud-update: v1.0でcsv/tsvは廃止。jsonに置換し、必要なら --query/jq を利用してください (https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/)
 
 # 古いセレクタ構文
-usacloud disk read mydisk # sacloud-update: --selectorはv1で廃止。ID/名称/タグをコマンド引数に指定する仕様へ移行 (https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/)
-usacloud server delete to-be-removed # sacloud-update: --selectorはv1で廃止。ID/名称/タグをコマンド引数に指定する仕様へ移行 (https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/)
+usacloud disk read mydisk # usacloud-update: --selectorはv1で廃止。ID/名称/タグをコマンド引数に指定する仕様へ移行 (https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/)
+usacloud server delete to-be-removed # usacloud-update: --selectorはv1で廃止。ID/名称/タグをコマンド引数に指定する仕様へ移行 (https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/)
 
 # 変更されたリソース名
-usacloud cdrom list # sacloud-update: v1ではリソース名がcdromに統一 (https://manual.sakura.ad.jp/cloud-api/1.1/cdrom/index.html)
-usacloud note list # sacloud-update: v1ではstartup-scriptはnoteに統一 (https://docs.usacloud.jp/usacloud/)
-usacloud ipaddress read --zone tk1a --ipaddress 203.0.113.10 # sacloud-update: v1ではIPv4関連はipaddressに整理 (https://docs.usacloud.jp/usacloud/references/ipaddress/)
+usacloud cdrom list # usacloud-update: v1ではリソース名がcdromに統一 (https://manual.sakura.ad.jp/cloud-api/1.1/cdrom/index.html)
+usacloud note list # usacloud-update: v1ではstartup-scriptはnoteに統一 (https://docs.usacloud.jp/usacloud/)
+usacloud ipaddress read --zone tk1a --ipaddress 203.0.113.10 # usacloud-update: v1ではIPv4関連はipaddressに整理 (https://docs.usacloud.jp/usacloud/references/ipaddress/)
 
 # 古いプロダクト名
-usacloud disk-plan list # sacloud-update: v1系では *-plan へ名称統一 (https://docs.usacloud.jp/usacloud/)
+usacloud disk-plan list # usacloud-update: v1系では *-plan へ名称統一 (https://docs.usacloud.jp/usacloud/)
 
 # 廃止されたコマンド
-# usacloud summary # sacloud-update: summaryコマンドはv1で廃止。要件に応じて bill/self/各list か rest を利用してください (https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/)
+# usacloud summary # usacloud-update: summaryコマンドはv1で廃止。要件に応じて bill/self/各list か rest を利用してください (https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/)
 
 # 非対応のオブジェクトストレージ
-# usacloud object-storage list # sacloud-update: v1ではオブジェクトストレージ操作は非対応方針。S3互換ツール/他プロバイダやTerraformを検討 (https://github.com/sacloud/usacloud/issues/585)
+# usacloud object-storage list # usacloud-update: v1ではオブジェクトストレージ操作は非対応方針。S3互換ツール/他プロバイダやTerraformを検討 (https://github.com/sacloud/usacloud/issues/585)
 
 # ゾーン指定の記述ゆれ
-usacloud server list --zone=all # sacloud-update: 全ゾーン一括操作は --zone=all を推奨 (https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/)
+usacloud server list --zone=all # usacloud-update: 全ゾーン一括操作は --zone=all を推奨 (https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/)
 ```
 
 ### 統計出力例 (stderr)
@@ -231,16 +231,16 @@ usacloud server list --zone=all # sacloud-update: 全ゾーン一括操作は --
 1. **バックアップの作成**
    ```bash
    cp original_script.sh original_script.sh.backup
-   sacloud-update --in original_script.sh --out updated_script.sh
+   usacloud-update --in original_script.sh --out updated_script.sh
    ```
 
 2. **段階的な確認**
    ```bash
    # 統計のみ確認
-   sacloud-update --in script.sh --out /dev/null
+   usacloud-update --in script.sh --out /dev/null
    
    # 変換実行
-   sacloud-update --in script.sh --out script_v1.1.sh
+   usacloud-update --in script.sh --out script_v1.1.sh
    
    # 動作確認
    bash script_v1.1.sh
@@ -256,7 +256,7 @@ usacloud server list --zone=all # sacloud-update: 全ゾーン一括操作は --
 **対策**: 
 ```bash
 # 統計出力で未変換行を確認
-sacloud-update --in script.sh --out /dev/null --stats=true
+usacloud-update --in script.sh --out /dev/null --stats=true
 ```
 
 #### 2. 「タグ指定でエラーが発生する」
@@ -273,7 +273,7 @@ sacloud-update --in script.sh --out /dev/null --stats=true
 
 ```bash
 # 詳細な変更ログを保存
-sacloud-update --in script.sh --out updated.sh 2> changes.log
+usacloud-update --in script.sh --out updated.sh 2> changes.log
 
 # ログの確認
 cat changes.log
@@ -283,12 +283,12 @@ cat changes.log
 
 1. **統計出力の確認**
    ```bash
-   sacloud-update --in problematic.sh --out /dev/null
+   usacloud-update --in problematic.sh --out /dev/null
    ```
 
 2. **部分的なテスト**
    ```bash
-   echo "usacloud server list --output-type=csv" | sacloud-update
+   echo "usacloud server list --output-type=csv" | usacloud-update
    ```
 
 3. **バックアップからの復元**

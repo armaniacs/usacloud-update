@@ -225,8 +225,8 @@ make verify-sample
 make clean build
 
 # バイナリの動作確認
-./bin/sacloud-update --help
-echo "usacloud server list --output-type=csv" | ./bin/sacloud-update
+./bin/usacloud-update --help
+echo "usacloud server list --output-type=csv" | ./bin/usacloud-update
 ```
 
 ## トラブルシューティング
@@ -250,7 +250,7 @@ echo "usacloud server list --output-type=csv" | ./bin/sacloud-update
 1. **段階的な確認**:
    ```bash
    # 単一行での動作確認
-   echo "問題のある行" | ./bin/sacloud-update --stats
+   echo "問題のある行" | ./bin/usacloud-update --stats
    
    # 特定ルールの動作確認
    go test -run "TestSpecificRule" -v ./...

@@ -1,11 +1,11 @@
-# sacloud-update
+# usacloud-update
 
 sacloudの v0, v1.0, v1.1 それぞれの記述が混じったbashスクリプトが与えられた場合に v1.1で動作するようにスクリプトを書き換えるプログラムです。
 
 ## Usage
 
-cat input.sh | sacloud-update > output.sh
-sacloud-update --in input.sh --out output.sh
+cat input.sh | usacloud-update > output.sh
+usacloud-update --in input.sh --out output.sh
 
 ## Notes
 - 自動変換できない箇所は元行をコメントアウトし、**手動対応**を促すコメントを付与します。

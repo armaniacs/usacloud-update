@@ -66,7 +66,7 @@ type Engine struct {
 
 **戻り値**: 生成ファイル用の標準ヘッダー文字列
 
-**内容**: `"# Updated for usacloud v1.1 by sacloud-update — DO NOT EDIT ABOVE THIS LINE"`
+**内容**: `"# Updated for usacloud v1.1 by usacloud-update — DO NOT EDIT ABOVE THIS LINE"`
 
 ### `DefaultRules() []Rule`
 

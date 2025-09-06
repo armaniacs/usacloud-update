@@ -3,7 +3,7 @@ package transform
 import "strings"
 
 func GeneratedHeader() string {
-	return "# Updated for usacloud v1.1 by sacloud-update — DO NOT EDIT ABOVE THIS LINE"
+	return "# Updated for usacloud v1.1 by usacloud-update — DO NOT EDIT ABOVE THIS LINE"
 }
 
 func DefaultRules() []Rule {

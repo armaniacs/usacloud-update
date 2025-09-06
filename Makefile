@@ -1,14 +1,16 @@
-# Makefile for sacloud-update
+# Makefile for usacloud-update
 # Usage:
 #   make build         # ビルド
 #   make test          # 通常テスト（golden比較）
 #   make golden        # 期待値(golden)を最新出力で上書き更新
 #   make verify-sample # サンプルを実行して期待値とdiff確認
+#   make install       # $GOPATH/bin にインストール
+#   make uninstall     # $GOPATH/bin から削除
 #   make tidy fmt vet  # 開発補助
 #   make clean         # 生成物掃除
 
 GO       ?= go
-BINARY   := sacloud-update
+BINARY   := usacloud-update
 BIN_DIR  := bin
 CMD_PKG  := ./cmd/$(BINARY)
 PKGS     := ./...
@@ -17,7 +19,7 @@ IN_SAMPLE  := testdata/sample_v0_v1_mixed.sh
 OUT_SAMPLE := /tmp/out.sh
 GOLDEN     := testdata/expected_v1_1.sh
 
-.PHONY: all build run test golden verify-sample tidy fmt vet clean
+.PHONY: all build run test golden verify-sample install uninstall tidy fmt vet clean
 
 all: build
 
@@ -46,6 +48,16 @@ fmt:
 
 vet:
 	$(GO) vet $(PKGS)
+
+# ユーザーのGOPATH/binにインストール
+install:
+	$(GO) install $(CMD_PKG)
+	@echo "✅ $(BINARY) を $(shell go env GOPATH)/bin にインストールしました"
+
+# アンインストール
+uninstall:
+	rm -f $(shell go env GOPATH)/bin/$(BINARY)
+	@echo "🗑️  $(BINARY) をアンインストールしました"
 
 clean:
 	rm -rf $(BIN_DIR)

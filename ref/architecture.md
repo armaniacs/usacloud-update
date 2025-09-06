@@ -3,8 +3,8 @@
 ## プロジェクト構造
 
 ```
-usacloud-update/
-├── cmd/sacloud-update/     # CLI アプリケーション エントリーポイント
+uusacloud-update/
+├── cmd/usacloud-update/     # CLI アプリケーション エントリーポイント
 ├── internal/transform/     # コア変換ロジック
 ├── testdata/              # テストデータ（サンプル入力と期待出力）
 └── ref/                   # プロジェクト参考資料
@@ -12,7 +12,7 @@ usacloud-update/
 
 ## コンポーネント設計
 
-### 1. CLI レイヤー (`cmd/sacloud-update/main.go`)
+### 1. CLI レイヤー (`cmd/usacloud-update/main.go`)
 
 **責務**: ユーザーインターフェースとファイル入出力の制御
 
@@ -53,7 +53,7 @@ usacloud-update/
 - `url`: 公式ドキュメントへの参照
 
 **自動コメント機能**:
-- 形式: `# sacloud-update: 理由 (URL)`
+- 形式: `# usacloud-update: 理由 (URL)`
 - 重複コメント防止機能
 - 変更箇所の詳細なフラグメント追跡
 

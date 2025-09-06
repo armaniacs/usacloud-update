@@ -22,8 +22,8 @@ func (r *simpleRule) Apply(line string) (string, bool, string, string) {
 		return line, false, "", ""
 	}
 	after := r.re.ReplaceAllString(line, r.repl(m))
-	comment := fmt.Sprintf(" # sacloud-update: %s (%s)", r.reason, r.url)
-	if !strings.Contains(after, "# sacloud-update:") {
+	comment := fmt.Sprintf(" # usacloud-update: %s (%s)", r.reason, r.url)
+	if !strings.Contains(after, "# usacloud-update:") {
 		after += comment
 	}
 	beforeFrag := strings.TrimSpace(m[0])
