@@ -3,7 +3,7 @@
 ## プロジェクト構造
 
 ```
-uusacloud-update/
+usacloud-update/
 ├── cmd/usacloud-update/     # CLI アプリケーション エントリーポイント
 ├── internal/transform/     # コア変換ロジック
 ├── testdata/              # テストデータ（サンプル入力と期待出力）

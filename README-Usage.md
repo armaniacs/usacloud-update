@@ -12,8 +12,8 @@
 
 ```bash
 # リポジトリをクローン
-git clone https://github.com/armaniacs/uusacloud-update.git
-cd uusacloud-update
+git clone https://github.com/armaniacs/usacloud-update.git
+cd usacloud-update
 
 # ビルド
 make build
