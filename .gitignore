@@ -39,3 +39,4 @@ go.work.sum
 CLAUDE.md
 *.claude/*.local.*
 *.swp
+.serena/
