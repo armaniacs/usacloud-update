@@ -5,6 +5,33 @@
 フォーマットは [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) に基づき、
 このプロジェクトは [セマンティック バージョニング](https://semver.org/spec/v2.0.0.html) に準拠します。
 
+## [1.2.0] - 2025-09-07
+
+### 追加
+- CLIヘルプメッセージの大幅改善:
+  - ツールの概要と目的の説明を追加
+  - 4つの実用的な使用例を追加
+  - 日本語でのオプション説明に変更
+  - README-Usage.mdへの案内を追加
+
+### 修正
+- **重要**: 非usacloud行の誤変換防止:
+  - `--output-type=csv/tsv` ルールをusacloud文脈に限定
+  - `--zone = all` ルールをusacloud文脈に限定
+  - 他のツール（python, curl, docker等）のオプションが意図せず変更される問題を解決
+
+### テスト
+- 非usacloud行を含むテストケースを追加:
+  - `testdata/mixed_with_non_usacloud.sh` - 混在した入力テストケース
+  - `testdata/expected_mixed_non_usacloud.sh` - 期待される結果
+  - `make verify-mixed` - 新しい検証コマンド
+- 既存テストの回帰確認済み
+
+### 技術的改善
+- より安全な正規表現パターンの採用
+- 包括的なテストカバレッジの実現
+- ツールの安全性と信頼性の向上
+
 ## [1.1.0] - 2025-09-06
 
 ### 変更点

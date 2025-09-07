@@ -19,7 +19,11 @@ IN_SAMPLE  := testdata/sample_v0_v1_mixed.sh
 OUT_SAMPLE := /tmp/out.sh
 GOLDEN     := testdata/expected_v1_1.sh
 
-.PHONY: all build run test golden verify-sample install uninstall tidy fmt vet clean
+IN_MIXED   := testdata/mixed_with_non_usacloud.sh
+OUT_MIXED  := /tmp/out_mixed.sh
+GOLDEN_MIXED := testdata/expected_mixed_non_usacloud.sh
+
+.PHONY: all build run test golden verify-sample verify-mixed install uninstall tidy fmt vet clean
 
 all: build
 
@@ -39,6 +43,11 @@ golden:
 # サンプル入力を変換して期待値と比較（手元確認）
 verify-sample: run
 	diff -u $(GOLDEN) $(OUT_SAMPLE) || true
+
+# 非usacloud行混在テストの実行と期待値比較
+verify-mixed: build
+	$(BIN_DIR)/$(BINARY) --in $(IN_MIXED) --out $(OUT_MIXED)
+	diff -u $(GOLDEN_MIXED) $(OUT_MIXED) || true
 
 tidy:
 	$(GO) mod tidy

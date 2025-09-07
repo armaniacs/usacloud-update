@@ -9,10 +9,10 @@ func GeneratedHeader() string {
 func DefaultRules() []Rule {
 	var rules []Rule
 
-	// 1) 出力タイプcsv/tsvの廃止 -> jsonへ
+	// 1) 出力タイプcsv/tsvの廃止 -> jsonへ (usacloud文脈に限定)
 	rules = append(rules, mk(
 		"output-type-csv-tsv",
-		`(?i)(--output-type|\s-o)\s*=?\s*(csv|tsv)`,
+		`(?i)\busacloud\s+[^\s]*\s+.*?(--output-type|\s-o)\s*=?\s*(csv|tsv)`,
 		func(m []string) string { return strings.Replace(m[0], m[2], "json", 1) },
 		"v1.0でcsv/tsvは廃止。jsonに置換し、必要なら --query/jq を利用してください",
 		"https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/",
@@ -94,11 +94,13 @@ func DefaultRules() []Rule {
 		))
 	}
 
-	// 9) --zone all の有効化: 変換は不要だが誤記修正(=の周辺空白)
+	// 9) --zone all の有効化: 変換は不要だが誤記修正(=の周辺空白) (usacloud文脈に限定)
 	rules = append(rules, mk(
 		"zone-all-normalize",
-		`--zone\s*=\s*all`,
-		func(m []string) string { return "--zone=all" },
+		`(\busacloud\s+[^\s]*\s+.*?)--zone\s*=\s*all`,
+		func(m []string) string {
+			return m[1] + "--zone=all"
+		},
 		"全ゾーン一括操作は --zone=all を推奨",
 		"https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/",
 	))
