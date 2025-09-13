@@ -1,0 +1,54 @@
+# usacloud-update Configuration File
+# This file contains settings for usacloud-update sandbox functionality
+#
+# Custom Configuration Directory:
+# You can specify a custom directory for this configuration file using:
+# export USACLOUD_UPDATE_CONFIG_DIR=/path/to/your/config/directory
+# The configuration file will be: ${USACLOUD_UPDATE_CONFIG_DIR}/usacloud-update.conf
+
+[sakura-cloud]
+# Sakura Cloud API credentials (required for sandbox)
+access_token = "your-access-token-here"
+access_token_secret = "your-access-token-secret-here"
+
+# Target zone for sandbox operations (must be tk1v)
+zone = "tk1v"
+
+# API endpoint for sandbox environment
+api_endpoint = "https://secure.sakura.ad.jp/cloud/zone/tk1v/api/cloud/1.1/"
+
+[sandbox]
+# Sandbox functionality settings
+enabled = true
+debug = false
+dry_run = false
+interactive = true
+timeout = 30
+
+# Configuration notes:
+# - This file contains sensitive API credentials
+# - Copy this file to ~/.config/usacloud-update/usacloud-update.conf
+# - File permissions will be set to 600 (owner read/write only) automatically
+# - For API key setup, visit: https://manual.sakura.ad.jp/cloud/api/apikey.html
+
+# Usage:
+# 1. Copy this file to ~/.config/usacloud-update/usacloud-update.conf
+#    Or set USACLOUD_UPDATE_CONFIG_DIR and copy to ${USACLOUD_UPDATE_CONFIG_DIR}/usacloud-update.conf
+# 2. Replace "your-access-token-here" with your actual access token
+# 3. Replace "your-access-token-secret-here" with your actual access token secret
+# 4. Adjust other settings as needed
+# 5. Run: usacloud-update --sandbox
+
+# API Key Setup Instructions:
+# 1. Login to Sakura Cloud Control Panel
+# 2. Go to Settings → API Keys
+# 3. Click "Add" button
+# 4. Enter a name (e.g., "usacloud-update-sandbox")
+# 5. Click "Create" button
+# 6. Copy the displayed access token and secret
+
+# Important Notes:
+# - This file contains sensitive information
+# - Keep this file secure and do not share it
+# - Sandbox environment has API call limitations but no charges
+# - Only tk1v zone is supported for sandbox operations

@@ -1,0 +1,46 @@
+{
+  "transform_output": "",
+  "transform_stats": null,
+  "validation_results": [
+    {
+      "line_number": 26,
+      "original_line": "usacloud iso-imag list  # iso-image のタイポ（かつ廃止）",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    }
+  ],
+  "validation_summary": {
+    "total_issues": 1,
+    "errors": 1,
+    "warnings": 0,
+    "suggestions": 0,
+    "deprecated_commands": 1
+  },
+  "error_messages": [
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso-imag' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    }
+  ],
+  "warning_messages": null,
+  "suggestions": null,
+  "deprecation_warnings": null,
+  "help_output": "🔍 検出された問題と解決方法:\n\n行 26: usacloud iso-imag list  # iso-image のタイポ（かつ廃止）\n  • iso-imageコマンドは廃止されました。cdromコマンドを使用してください。\n\n",
+  "interactive_output": "",
+  "test_metadata": {
+    "test_name": "BeginnerModeHelp",
+    "input_file": "typo_commands.sh",
+    "config_used": "beginner.conf",
+    "test_date": "2025-09-10T07:47:34Z",
+    "tool_version": "1.9.0",
+    "language": "ja",
+    "color_enabled": false
+  }
+}

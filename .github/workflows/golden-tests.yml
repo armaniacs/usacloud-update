@@ -1,0 +1,37 @@
+name: Golden File Tests
+
+on: [push, pull_request]
+
+jobs:
+  golden-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-go@v3
+      with:
+        go-version: 1.21
+    
+    - name: Run golden file tests
+      run: |
+        go test ./tests/... -run=TestGolden -v
+    
+    - name: Check for golden file changes
+      if: failure()
+      run: |
+        echo "## 🔍 ゴールデンファイルテスト失敗" >> $GITHUB_STEP_SUMMARY
+        echo "ゴールデンファイルと実際の出力に差分があります。" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 修正方法:" >> $GITHUB_STEP_SUMMARY
+        echo "1. ローカルで \`go test ./tests/... -run=TestGolden -update\` を実行" >> $GITHUB_STEP_SUMMARY
+        echo "2. 更新されたゴールデンファイルを確認・コミット" >> $GITHUB_STEP_SUMMARY
+    
+    - name: Update golden files (on main branch)
+      if: github.ref == 'refs/heads/main' && failure()
+      run: |
+        go test ./tests/... -run=TestGolden -update
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add testdata/golden/
+        git commit -m "自動更新: ゴールデンファイル [skip ci]" || exit 0
+        git push

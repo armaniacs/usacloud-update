@@ -1,0 +1,7 @@
+[
+  "server", "disk", "database", "loadbalancer", "dns", "gslb", "proxylb",
+  "autobackup", "archive", "cdrom", "bridge", "packetfilter", "internet",
+  "ipaddress", "ipv6addr", "ipv6net", "subnet", "swytch", "localrouter",
+  "vpcrouter", "mobilegateway", "sim", "nfs", "license", "licenseinfo",
+  "sshkey", "note", "icon", "privatehost", "privatehostplan", "zone"
+]

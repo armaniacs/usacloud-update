@@ -1,0 +1,9 @@
+{
+  "input": "usacloud iso-image list",
+  "output": "usacloud cdrom list # usacloud-update: iso-image→cdrom変換",
+  "stats": null,
+  "errors": [],
+  "warnings": [],
+  "execution_time": 125625,
+  "memory_usage": 88
+}

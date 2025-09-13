@@ -1,0 +1,54 @@
+{
+  "transform_output": "#!/bin/bash\n# タイポコマンドテスト用サンプル\n# 様々なタイポパターンを含むスクリプト\n\n# 一般的なタイポパターン\nusacloud serv list  # server のタイポ\nusacloud databse list  # database のタイポ\nusacloud dsk list  # disk のタイポ\n\n# サブコマンドのタイポ\nusacloud server lst  # list のタイポ\nusacloud server crete --name test  # create のタイポ\nusacloud disk updat 123456  # update のタイポ\n\n# オプションのタイポ\nusacloud server list --output-tyep json  # --output-type のタイポ\nusacloud server list --zon is1a  # --zone のタイポ\nusacloud server list --tgas web  # --tags のタイポ\n\n# 文字順序の入れ替え\nusacloud sevrer list  # server の文字入れ替え\nusacloud sever list   # server の文字欠落\nusacloud serverr list # server の文字重複\n\n# 廃止コマンドのタイポ（二重のエラー）\nusacloud iso-imag list  # cdrom のタイポ（かつ廃止）  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nusacloud startup-scritp list  # startup-script のタイポ（かつ廃止）\n\n# 大文字小文字の混在\nusacloud Server List\nusacloud DATABASE list\nusacloud Disk CREATE\n\n# 余分なスペース\nusacloud  server  list\nusacloud server  list  --zone  is1a\n\n# ハイフンとアンダースコアの混同\nusacloud server_list\nusacloud disk-create\nusacloud database_read\n\n# よくある英語のタイポ\nusacloud databse list  # database\nusacloud sever list    # server  \nusacloud netwrok list  # network (存在しないが)\n\n# 日本語キーボードでの典型的なタイプミス\nusacloud serve list    # r と e の隣接\nusacloud datavase list # b と v の隣接\nusacloud lsit          # i と s の順序\n\n# 省略形のタイポ\nusacloud srv list      # server の省略形タイポ\nusacloud db list       # database の省略形タイポ\nusacloud vm list       # virtual machine（usacloud では存在しない）",
+  "transform_stats": {
+    "total_lines": 56,
+    "processed_lines": 54,
+    "transformed_lines": 1,
+    "skipped_lines": 2,
+    "rules_applied": [
+      "resource_rename_iso_image"
+    ]
+  },
+  "validation_results": [
+    {
+      "line_number": 26,
+      "original_line": "usacloud iso-imag list  # iso-image のタイポ（かつ廃止）",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    }
+  ],
+  "validation_summary": {
+    "total_issues": 1,
+    "errors": 1,
+    "warnings": 0,
+    "suggestions": 0,
+    "deprecated_commands": 1
+  },
+  "error_messages": [
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso-imag' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    }
+  ],
+  "warning_messages": null,
+  "suggestions": null,
+  "deprecation_warnings": null,
+  "help_output": "🔍 検出された問題と解決方法:\n\n行 26: usacloud iso-imag list  # iso-image のタイポ（かつ廃止）\n  • iso-imageコマンドは廃止されました。cdromコマンドを使用してください。\n\n",
+  "interactive_output": "",
+  "test_metadata": {
+    "test_name": "TypoCommands",
+    "input_file": "typo_commands.sh",
+    "config_used": "default.conf",
+    "test_date": "2025-09-12T13:14:48Z",
+    "tool_version": "1.9.0",
+    "language": "ja",
+    "color_enabled": false
+  }
+}

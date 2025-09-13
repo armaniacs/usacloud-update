@@ -1,0 +1,13 @@
+{
+  "rules": {
+    "preset-ja-technical-writing": {
+      "no-mix-dearu-desumasu": {
+        "preferInHeader": "",
+        "preferInBody": "ですます",
+        "preferInList": "ですます",
+        "strict": true
+      }
+    },
+    "preset-ai-writing": true
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "transform_output": "#!/bin/bash\n# CI workflow scenario - continuous integration and deployment\n\necho \"Starting CI workflow...\"\n\nset -e  # Exit on any error\n\n# Environment validation\nusacloud server list --selector \"Tags.Environment=ci\" --output-type json\nusacloud disk list --zone tk1a --output-type json  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/\n\n# Infrastructure provisioning for CI\nusacloud server create --name \"ci-runner-$(date +%s)\" --plan standard --os-type centos8\nusacloud disk create --name \"ci-data\" --size 50 --plan ssd\n\n# Network setup for CI environment\nusacloud switch create --name \"ci-network\"\nusacloud internet create --name \"ci-router\" --bandwidth 100\n\n# Database setup for testing\nusacloud database create --name \"ci-testdb\" --plan development --backup-rotate 7\n\n# SSH key deployment\nusacloud ssh-key create --name \"ci-deploy-key\" --public-key \"$(cat ci-key.pub)\"\n\n# Archive management for artifacts\nusacloud archive create --name \"ci-artifacts-$(date +%Y%m%d)\"\n\n# Load balancer for staging environment\nusacloud loadbalancer create --name \"ci-staging-lb\" --plan standard\n\n# Monitoring setup\nusacloud server monitor --selector \"Tags.Environment=ci\"\n\n# Cleanup old CI resources (older than 7 days)\nusacloud server list --selector \"Tags.Environment=ci,Tags.Created\u003c$(date -d '7 days ago' +%Y-%m-%d)\"\nusacloud disk list --selector \"Tags.Environment=ci,Tags.Created\u003c$(date -d '7 days ago' +%Y-%m-%d)\"\n\n# Backup operations before deployment\nusacloud database backup --selector \"Tags.Environment=staging\"\nusacloud archive create --name \"pre-deploy-backup-$(date +%Y%m%d-%H%M%S)\"\n\n# Health checks\nusacloud server status --selector \"Tags.Environment=staging\"\nusacloud database status --selector \"Tags.Environment=staging\"\nusacloud loadbalancer status --selector \"Tags.Environment=staging\"\n\n# Post-deployment verification\nusacloud server list --selector \"Tags.Environment=production\" --output-type json\nusacloud database monitor --selector \"Tags.Environment=production\"\n\necho \"CI workflow completed successfully\"",
+  "transform_stats": {
+    "total_lines": 52,
+    "processed_lines": 50,
+    "transformed_lines": 1,
+    "skipped_lines": 2,
+    "rules_applied": [
+      "output_format_csv_to_json"
+    ]
+  },
+  "validation_results": [
+    {
+      "line_number": 10,
+      "original_line": "usacloud disk list --zone tk1a --output-type csv",
+      "validation_status": "warning",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        }
+      ]
+    }
+  ],
+  "validation_summary": {
+    "total_issues": 1,
+    "errors": 0,
+    "warnings": 1,
+    "suggestions": 1,
+    "deprecated_commands": 0
+  },
+  "error_messages": null,
+  "warning_messages": null,
+  "suggestions": [
+    {
+      "line_number": 10,
+      "original_command": "usacloud disk list --zone tk1a --output-type csv",
+      "suggested_command": "usacloud disk list --zone tk1a --output-type json",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    }
+  ],
+  "deprecation_warnings": null,
+  "help_output": "🔍 検出された問題と解決方法:\n\n行 10: usacloud disk list --zone tk1a --output-type csv\n  • csv出力形式は非推奨です。json形式の使用を推奨します。\n    推奨: --output-type json\n\n",
+  "interactive_output": "",
+  "test_metadata": {
+    "test_name": "CIWorkflow",
+    "input_file": "ci_scenario.sh",
+    "config_used": "ci.conf",
+    "test_date": "2025-09-12T13:19:11Z",
+    "tool_version": "1.9.0",
+    "language": "ja",
+    "color_enabled": false
+  }
+}

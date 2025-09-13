@@ -1,0 +1,33 @@
+{
+  "transform_output": "#!/bin/bash\n# Production migration scenario - critical production system migration\n\necho \"Starting production migration...\"\n\nset -e  # Exit on any error - critical for production\n\n# Pre-migration verification\necho \"Phase 1: Pre-migration verification\"\nusacloud server list --selector \"Tags.Environment=production\" --output-type json\nusacloud database status --selector \"Tags.Environment=production\"\nusacloud loadbalancer health-check --selector \"Tags.Environment=production\"\n\n# Backup all critical systems\necho \"Phase 2: Comprehensive backup\"\nusacloud database backup --selector \"Tags.Environment=production\" --name \"pre-migration-$(date +%Y%m%d-%H%M%S)\"\nusacloud server snapshot --selector \"Tags.Critical=true\"\nusacloud archive create --name \"production-backup-$(date +%Y%m%d-%H%M%S)\"\n\n# Network infrastructure preparation\necho \"Phase 3: Network infrastructure setup\"\nusacloud switch create --name \"production-new-switch\"\nusacloud internet create --name \"production-new-router\" --bandwidth 1000\nusacloud bridge create --name \"migration-bridge\"\n\n# Database migration (high availability setup)\necho \"Phase 4: Database migration\"\nusacloud database create --name \"production-db-new\" --plan premium --backup-rotate 30\nusacloud database clone --source-selector \"Tags.Environment=production,Tags.Role=primary\"\nusacloud database replica-create --master-id 123456 --name \"production-replica\"\n\n# Server migration with zero downtime\necho \"Phase 5: Server migration\"\nusacloud server create --name \"web-new-1\" --plan high-memory --os-type ubuntu20\nusacloud server create --name \"web-new-2\" --plan high-memory --os-type ubuntu20\nusacloud server create --name \"app-new-1\" --plan high-cpu --os-type centos8\n\n# Load balancer reconfiguration\necho \"Phase 6: Load balancer migration\" \nusacloud loadbalancer create --name \"production-lb-new\" --plan premium\nusacloud loadbalancer vip-add --ip-address \"192.168.1.100\"\nusacloud loadbalancer server-add --server-selector \"Name~web-new-*\"\n\n# SSL certificate migration\necho \"Phase 7: SSL certificate migration\"\nusacloud loadbalancer ssl-certificate-add --cert-file /secure/production.crt\nusacloud loadbalancer ssl-certificate-add --key-file /secure/production.key\n\n# Storage migration\necho \"Phase 8: Storage migration\"\nusacloud disk create --name \"production-data-new\" --size 1000 --plan ssd\nusacloud disk connect --server-selector \"Name~app-new-*\"\n\n# Monitoring setup for new infrastructure\necho \"Phase 9: Monitoring configuration\"\nusacloud server monitor --selector \"Name~*-new-*\" --interval 60\nusacloud database monitor --selector \"Name~*-new\" --interval 300\nusacloud loadbalancer monitor --selector \"Name~*-new*\"\n\n# DNS and traffic switching preparation\necho \"Phase 10: Traffic switching preparation\"\nusacloud internet update --id 123456 --bandwidth 2000\nusacloud switch connect --server-selector \"Name~*-new-*\"\n\n# Post-migration verification\necho \"Phase 11: Post-migration verification\"\nusacloud server status --selector \"Name~*-new-*\"\nusacloud database status --selector \"Name~*-new\"\nusacloud loadbalancer health-check --selector \"Name~*-new*\"\n\n# Old infrastructure decommissioning (commented for safety)\necho \"Phase 12: Old infrastructure cleanup (manual verification required)\"\n# usacloud server list --selector \"Tags.Environment=production,Tags.Status=old\"\n# usacloud database list --selector \"Tags.Environment=production,Tags.Status=old\"\n\necho \"Production migration completed successfully\"\necho \"Manual verification required before decommissioning old infrastructure\"",
+  "transform_stats": {
+    "total_lines": 77,
+    "processed_lines": 75,
+    "transformed_lines": 0,
+    "skipped_lines": 2,
+    "rules_applied": []
+  },
+  "validation_results": null,
+  "validation_summary": {
+    "total_issues": 0,
+    "errors": 0,
+    "warnings": 0,
+    "suggestions": 0,
+    "deprecated_commands": 0
+  },
+  "error_messages": null,
+  "warning_messages": null,
+  "suggestions": null,
+  "deprecation_warnings": null,
+  "help_output": "✅ 問題は検出されませんでした。",
+  "interactive_output": "",
+  "test_metadata": {
+    "test_name": "ProductionMigration",
+    "input_file": "production_migration.sh",
+    "config_used": "production.conf",
+    "test_date": "2025-09-12T13:19:11Z",
+    "tool_version": "1.9.0",
+    "language": "ja",
+    "color_enabled": false
+  }
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "name": "engine_process_compatibility",
+    "description": "Test transform engine process method compatibility",
+    "function": "transform.Engine.Process",
+    "parameters": "usacloud server list --output-type csv",
+    "expected_result": "usacloud server list --output-type json",
+    "expected_error": "",
+    "tags": [
+      "api",
+      "transform"
+    ],
+    "category": "api",
+    "priority": "high"
+  },
+  {
+    "name": "validation_compatibility",
+    "description": "Test validation API compatibility",
+    "function": "validation.Validator.Validate",
+    "parameters": "usacloud server list",
+    "expected_result": true,
+    "expected_error": "",
+    "tags": [
+      "api",
+      "validation"
+    ],
+    "category": "api",
+    "priority": "high"
+  },
+  {
+    "name": "config_load_compatibility",
+    "description": "Test config loading API compatibility",
+    "function": "config.Load",
+    "parameters": "/path/to/config",
+    "expected_result": {},
+    "expected_error": "",
+    "tags": [
+      "api",
+      "config"
+    ],
+    "category": "api",
+    "priority": "medium"
+  }
+]

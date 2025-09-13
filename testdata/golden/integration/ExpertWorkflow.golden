@@ -1,0 +1,57 @@
+{
+  "transform_output": "#!/bin/bash\n# Expert workflow scenario - advanced operations for experienced users\n\necho \"Starting expert workflow...\"\n\n# Advanced server management with complex selectors\nusacloud server list --selector \"Tags.Environment=production\" --output-type json\nusacloud server power-on --selector \"Name~web-*\" --zone=tk1a\nusacloud server update --selector \"Tags.Role=database\" --memory 16\n\n# Complex disk operations with batch processing\nusacloud disk list --selector \"Size\u003e=100\" --output-type json  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/\nusacloud disk snapshot --selector \"Name~backup-*\" \nusacloud disk create --plan ssd --size 500 --name \"high-performance-disk\"\n\n# Advanced database configurations\nusacloud database list --selector \"Plan~premium*\"\nusacloud database create --plan premium --backup-rotate 30 --name \"production-db\"\nusacloud database clone --source-id 123456 --name \"staging-clone\"\n\n# Load balancer with SSL and health checks\nusacloud loadbalancer create --plan standard --name \"lb-production\"\nusacloud loadbalancer ssl-certificate-add --cert-file /path/to/cert.pem\nusacloud loadbalancer health-check --path /health --interval 10\n\n# Advanced networking with multiple zones\nusacloud internet create --name \"multi-zone-router\" --bandwidth 1000\nusacloud switch create --name \"production-switch\" \nusacloud bridge create --name \"inter-zone-bridge\"\n\n# Automation and scripting operations\nusacloud note create --name \"deploy-script\" --class shell\nusacloud note update --id 123456 --content \"$(cat deploy.sh)\"\n\n# Monitoring and alerts setup\nusacloud server monitor --id 123456 --interval 60\nusacloud database monitor --id 789012 --interval 300\n\n# Bulk operations with complex transformations\nfor zone in tk1a tk1b is1a is1b; do\n    usacloud server list --zone $zone --selector \"Tags.Environment=staging\"\n    usacloud disk cleanup --zone $zone --older-than \"30d\"\ndone\n\n# Archive management with versioning\nusacloud archive create --name \"backup-$(date +%Y%m%d-%H%M%S)\"\nusacloud archive share --id 456789 --password \"$(openssl rand -base64 12)\"\n\n# Security and compliance operations\nusacloud ssh-key rotate --name \"production-key\"\nusacloud server security-group-add --rules \"tcp:443:0.0.0.0/0\"\n\necho \"Expert workflow completed\"",
+  "transform_stats": {
+    "total_lines": 53,
+    "processed_lines": 51,
+    "transformed_lines": 1,
+    "skipped_lines": 2,
+    "rules_applied": [
+      "output_format_csv_to_json"
+    ]
+  },
+  "validation_results": [
+    {
+      "line_number": 12,
+      "original_line": "usacloud disk list --selector \"Size\u003e=100\" --output-type csv",
+      "validation_status": "warning",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        }
+      ]
+    }
+  ],
+  "validation_summary": {
+    "total_issues": 1,
+    "errors": 0,
+    "warnings": 1,
+    "suggestions": 1,
+    "deprecated_commands": 0
+  },
+  "error_messages": null,
+  "warning_messages": null,
+  "suggestions": [
+    {
+      "line_number": 12,
+      "original_command": "usacloud disk list --selector \"Size\u003e=100\" --output-type csv",
+      "suggested_command": "usacloud disk list --selector \"Size\u003e=100\" --output-type json",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    }
+  ],
+  "deprecation_warnings": null,
+  "help_output": "🔍 検出された問題と解決方法:\n\n行 12: usacloud disk list --selector \"Size\u003e=100\" --output-type csv\n  • csv出力形式は非推奨です。json形式の使用を推奨します。\n    推奨: --output-type json\n\n",
+  "interactive_output": "",
+  "test_metadata": {
+    "test_name": "ExpertWorkflow",
+    "input_file": "expert_scenario.sh",
+    "config_used": "expert.conf",
+    "test_date": "2025-09-12T13:19:11Z",
+    "tool_version": "1.9.0",
+    "language": "ja",
+    "color_enabled": false
+  }
+}

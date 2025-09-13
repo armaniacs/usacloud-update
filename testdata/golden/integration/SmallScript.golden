@@ -1,0 +1,119 @@
+{
+  "transform_output": "#!/bin/bash\n# Small script with 100 lines for performance testing\n\n# Server commands\nusacloud server list\nusacloud server list --output-type json  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/\nusacloud server create\nusacloud server delete\nusacloud server read\nusacloud server update\nusacloud server power-on\nusacloud server power-off\nusacloud server reset\nusacloud server shutdown\n\n# Disk commands  \nusacloud disk list\nusacloud disk list --output-type tsv\nusacloud disk create\nusacloud disk delete\nusacloud disk read\nusacloud disk update\nusacloud disk connect\nusacloud disk disconnect\nusacloud disk snapshot\nusacloud disk restore\n\n# Database commands\nusacloud database list\nusacloud database create\nusacloud database delete\nusacloud database read\nusacloud database update\nusacloud database backup\nusacloud database restore\nusacloud database clone\nusacloud database monitor\nusacloud database logs\n\n# Load balancer commands\nusacloud loadbalancer list\nusacloud loadbalancer create\nusacloud loadbalancer delete\nusacloud loadbalancer read\nusacloud loadbalancer update\nusacloud loadbalancer monitor\nusacloud loadbalancer status\nusacloud loadbalancer vip-add\nusacloud loadbalancer vip-delete\nusacloud loadbalancer server-add\n\n# Archive commands\nusacloud archive list\nusacloud archive create\nusacloud archive delete\nusacloud archive read\nusacloud archive update\nusacloud archive download\nusacloud archive upload\nusacloud archive share\nusacloud archive unshare\nusacloud archive ftp-open\n\n# ISO image commands (deprecated)\nusacloud cdrom list  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nusacloud cdrom create  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nusacloud cdrom delete  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nusacloud cdrom read  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nusacloud cdrom update  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\n\n# Switch commands\nusacloud switch list\nusacloud switch create\nusacloud switch delete\nusacloud switch read\nusacloud switch update\nusacloud switch connect\nusacloud switch disconnect\nusacloud switch bridge-info\nusacloud switch monitor\nusacloud switch status\n\n# Router commands\nusacloud internet list\nusacloud internet create\nusacloud internet delete\nusacloud internet read\nusacloud internet update\nusacloud internet monitor\nusacloud internet status\nusacloud internet enable-ipv6\nusacloud internet disable-ipv6\nusacloud internet update-bandwidth\n\n# Bridge commands\nusacloud bridge list\nusacloud bridge create\nusacloud bridge delete\nusacloud bridge read\nusacloud bridge update\nusacloud bridge info\nusacloud bridge monitor\nusacloud bridge status\nusacloud bridge connect\nusacloud bridge disconnect\n\n# Note commands (formerly startup-script)\nusacloud note list\nusacloud note create\nusacloud note delete\nusacloud note read\nusacloud note update\nusacloud note info\nusacloud note download\nusacloud note upload\nusacloud note share\nusacloud note unshare\n\n# SSH key commands\nusacloud ssh-key list\nusacloud ssh-key create\nusacloud ssh-key delete\nusacloud ssh-key read\nusacloud ssh-key update\nusacloud ssh-key generate\n\n# Icon commands\nusacloud icon list\nusacloud icon create\nusacloud icon delete\nusacloud icon read\nusacloud icon update\n\n# Summary command (deprecated)\nusacloud summary\n\necho \"Completed 100 line performance test\"",
+  "transform_stats": {
+    "total_lines": 137,
+    "processed_lines": 135,
+    "transformed_lines": 6,
+    "skipped_lines": 2,
+    "rules_applied": [
+      "output_format_csv_to_json",
+      "resource_rename_iso_image",
+      "resource_rename_iso_image",
+      "resource_rename_iso_image",
+      "resource_rename_iso_image",
+      "resource_rename_iso_image"
+    ]
+  },
+  "validation_results": [
+    {
+      "line_number": 6,
+      "original_line": "usacloud server list --output-type csv",
+      "validation_status": "warning",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        }
+      ]
+    },
+    {
+      "line_number": 65,
+      "original_line": "usacloud iso-image list",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 66,
+      "original_line": "usacloud iso-image create",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 67,
+      "original_line": "usacloud iso-image delete",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 68,
+      "original_line": "usacloud iso-image read",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 69,
+      "original_line": "usacloud iso-image update",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    }
+  ],
+  "validation_summary": {
+    "total_issues": 6,
+    "errors": 5,
+    "warnings": 1,
+    "suggestions": 1,
+    "deprecated_commands": 5
+  },
+  "error_messages": null,
+  "warning_messages": null,
+  "suggestions": null,
+  "deprecation_warnings": null,
+  "help_output": "",
+  "interactive_output": "",
+  "test_metadata": {
+    "test_name": "SmallScript",
+    "input_file": "small_100_lines.sh",
+    "config_used": "performance.conf",
+    "test_date": "2025-09-12T13:17:15Z",
+    "tool_version": "1.9.0",
+    "language": "ja",
+    "color_enabled": false
+  }
+}

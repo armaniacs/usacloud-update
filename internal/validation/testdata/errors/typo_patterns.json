@@ -1,0 +1,15 @@
+{
+  "server": ["serv", "sever", "serve", "svr", "servers"],
+  "disk": ["dsk", "disc", "disks", "dik"],
+  "database": ["db", "databse", "datbase", "databases", "databas"],
+  "config": ["conf", "cfg", "configure", "confg"],
+  "loadbalancer": ["lb", "loadbalance", "load-balancer", "balancer"],
+  "dns": ["domain", "domains", "ns"],
+  "gslb": ["global", "glb"],
+  "cdrom": ["cd", "iso", "iso-image", "isoimag"],
+  "note": ["notes", "startup", "startup-script"],
+  "sshkey": ["ssh", "key", "keys", "sshkeys"],
+  "ipaddress": ["ip", "ipaddr", "ipv4", "address"],
+  "subnet": ["subnets", "net"],
+  "switch": ["swytch", "switches"]
+}

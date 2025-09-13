@@ -1,0 +1,80 @@
+[
+  {
+    "name": "help_command",
+    "description": "Test help command functionality",
+    "arguments": [
+      "--help"
+    ],
+    "environment": null,
+    "expected_exit_code": 0,
+    "expected_output": [
+      "usacloud-update",
+      "使用方法",
+      "オプション"
+    ],
+    "expected_errors": null,
+    "tags": [
+      "help",
+      "cli"
+    ],
+    "category": "integration",
+    "priority": "high"
+  },
+  {
+    "name": "version_command",
+    "description": "Test version command functionality",
+    "arguments": [
+      "--version"
+    ],
+    "environment": null,
+    "expected_exit_code": 0,
+    "expected_output": [
+      "usacloud-update"
+    ],
+    "expected_errors": null,
+    "tags": [
+      "version",
+      "cli"
+    ],
+    "category": "integration",
+    "priority": "medium"
+  },
+  {
+    "name": "validate_only_mode",
+    "description": "Test validate-only mode",
+    "arguments": [
+      "--validate-only",
+      "/dev/stdin"
+    ],
+    "environment": null,
+    "expected_exit_code": 0,
+    "expected_output": null,
+    "expected_errors": null,
+    "tags": [
+      "validation",
+      "mode"
+    ],
+    "category": "integration",
+    "priority": "high"
+  },
+  {
+    "name": "invalid_option",
+    "description": "Test invalid option handling",
+    "arguments": [
+      "--invalid-option"
+    ],
+    "environment": null,
+    "expected_exit_code": 1,
+    "expected_output": null,
+    "expected_errors": [
+      "無効なオプション",
+      "--help"
+    ],
+    "tags": [
+      "error-handling",
+      "cli"
+    ],
+    "category": "integration",
+    "priority": "medium"
+  }
+]

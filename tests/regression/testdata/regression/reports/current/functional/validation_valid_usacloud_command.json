@@ -1,0 +1,13 @@
+{
+  "input": "usacloud server list",
+  "is_valid": false,
+  "errors": [
+    "無効なメインコマンド: serv"
+  ],
+  "warnings": null,
+  "suggestions": [
+    "server"
+  ],
+  "execution_time": 87000,
+  "memory_usage": 32
+}

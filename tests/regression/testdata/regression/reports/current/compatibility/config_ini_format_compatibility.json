@@ -1,0 +1,11 @@
+{
+  "config_type": "ini",
+  "config_data": {
+    "general": {
+      "debug": true
+    }
+  },
+  "is_valid": true,
+  "load_time": 83,
+  "validation_errors": []
+}

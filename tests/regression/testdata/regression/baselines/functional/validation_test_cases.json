@@ -1,0 +1,68 @@
+[
+  {
+    "name": "valid_usacloud_command",
+    "description": "Validate correct usacloud command",
+    "input": "usacloud server list",
+    "expected_valid": true,
+    "expected_errors": null,
+    "expected_warnings": null,
+    "expected_suggestions": null,
+    "tags": [
+      "valid",
+      "basic"
+    ],
+    "category": "validation",
+    "priority": "high"
+  },
+  {
+    "name": "invalid_main_command",
+    "description": "Detect invalid main command",
+    "input": "usacloud serv list",
+    "expected_valid": false,
+    "expected_errors": [
+      "無効なメインコマンド: serv"
+    ],
+    "expected_warnings": null,
+    "expected_suggestions": null,
+    "tags": [
+      "invalid",
+      "main-command"
+    ],
+    "category": "validation",
+    "priority": "high"
+  },
+  {
+    "name": "invalid_subcommand",
+    "description": "Detect invalid subcommand",
+    "input": "usacloud server lst",
+    "expected_valid": false,
+    "expected_errors": [
+      "無効なサブコマンド: lst"
+    ],
+    "expected_warnings": null,
+    "expected_suggestions": null,
+    "tags": [
+      "invalid",
+      "subcommand"
+    ],
+    "category": "validation",
+    "priority": "high"
+  },
+  {
+    "name": "deprecated_command_warning",
+    "description": "Warn about deprecated command",
+    "input": "usacloud iso-image list",
+    "expected_valid": true,
+    "expected_errors": null,
+    "expected_warnings": [
+      "廃止予定のコマンド: iso-image → cdrom を使用してください"
+    ],
+    "expected_suggestions": null,
+    "tags": [
+      "deprecated",
+      "warning"
+    ],
+    "category": "validation",
+    "priority": "medium"
+  }
+]

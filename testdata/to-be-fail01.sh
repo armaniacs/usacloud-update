@@ -1,0 +1,1 @@
+usacloud appliance show <nosql-appliance-id>

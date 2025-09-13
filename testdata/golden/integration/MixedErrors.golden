@@ -1,0 +1,94 @@
+{
+  "transform_output": "#!/bin/bash\n# Mixed errors test file - combination of different error types\n\necho \"Testing mixed error scenarios...\"\n\n# Valid commands\nusacloud server list\nusacloud disk list --output-type json\n\n# Typos (invalid commands)\nusacloud serv list\nusacloud lst\nusacloud Server list\n\n# Deprecated commands\nusacloud cdrom list  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nusacloud startup-script create\nusacloud object-storage list\n\n# Invalid subcommands\nusacloud server lst\nusacloud disk invalid-subcommand\nusacloud database wrong-action\n\n# Invalid options\nusacloud server list --invalid-flag\nusacloud disk create --wrong-option\n\n# Malformed syntax\nusacloud server --incomplete-command\nusacloud \nusacloud disk\n\n# Mixed valid and invalid in sequence\nusacloud server list --output-type json\nusacloud serv lst --invalid-flag\nusacloud disk list\nusacloud cdrom create --name test  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\n\n# Complex mixed errors\nusacloud product-server lst --output-type json --zone = all  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/\nusacloud startup-script invalid-sub --selector \"Name=test\"\n\necho \"Mixed errors test completed\"",
+  "transform_stats": {
+    "total_lines": 44,
+    "processed_lines": 42,
+    "transformed_lines": 3,
+    "skipped_lines": 2,
+    "rules_applied": [
+      "resource_rename_iso_image",
+      "resource_rename_iso_image",
+      "output_format_csv_to_json"
+    ]
+  },
+  "validation_results": [
+    {
+      "line_number": 16,
+      "original_line": "usacloud iso-image list",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 38,
+      "original_line": "usacloud iso-image create --name test",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 41,
+      "original_line": "usacloud product-server lst --output-type csv --zone = all",
+      "validation_status": "warning",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        }
+      ]
+    }
+  ],
+  "validation_summary": {
+    "total_issues": 3,
+    "errors": 2,
+    "warnings": 1,
+    "suggestions": 1,
+    "deprecated_commands": 2
+  },
+  "error_messages": [
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso-image' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    },
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso-image' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    }
+  ],
+  "warning_messages": null,
+  "suggestions": [
+    {
+      "line_number": 41,
+      "original_command": "usacloud product-server lst --output-type csv --zone = all",
+      "suggested_command": "usacloud product-server lst --output-type json --zone = all",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    }
+  ],
+  "deprecation_warnings": null,
+  "help_output": "🔍 検出された問題と解決方法:\n\n行 16: usacloud iso-image list\n  • iso-imageコマンドは廃止されました。cdromコマンドを使用してください。\n\n行 38: usacloud iso-image create --name test\n  • iso-imageコマンドは廃止されました。cdromコマンドを使用してください。\n\n行 41: usacloud product-server lst --output-type csv --zone = all\n  • csv出力形式は非推奨です。json形式の使用を推奨します。\n    推奨: --output-type json\n\n",
+  "interactive_output": "",
+  "test_metadata": {
+    "test_name": "MixedErrors",
+    "input_file": "mixed_errors.sh",
+    "config_used": "default.conf",
+    "test_date": "2025-09-12T13:14:48Z",
+    "tool_version": "1.9.0",
+    "language": "ja",
+    "color_enabled": false
+  }
+}

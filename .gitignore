@@ -29,8 +29,12 @@ profile.cov
 go.work
 go.work.sum
 
-# env file
+# env file (legacy)
 .env
+
+# Configuration files
+usacloud-update.conf
+usacloud-update
 
 # Editor/IDE
 # .idea/

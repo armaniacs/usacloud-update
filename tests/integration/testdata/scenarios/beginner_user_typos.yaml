@@ -1,0 +1,68 @@
+name: "初心者ユーザーのtypoシナリオ"
+description: "初心者がよく犯すtypoに対する支援機能のテスト"
+
+scenarios:
+  - name: "Server command typo"
+    description: "serverコマンドのtypo検出とサジェスト"
+    input:
+      type: "command"
+      arguments: ["--validate-only"]
+      content: "usacloud serv list"
+    expected:
+      exit_code: 1
+      error_contains:
+        - "serv"
+        - "有効なusacloudコマンドではありません"
+        - "server"
+      metrics:
+        suggestions_shown: 1
+
+  - name: "Subcommand typo with help"
+    description: "サブコマンドのtypo検出"
+    input:
+      type: "command"
+      arguments: ["--validate-only"] 
+      content: "usacloud server lst"
+    expected:
+      exit_code: 1
+      error_contains:
+        - "lst"
+        - "list"
+
+  - name: "Deprecated command guidance"
+    description: "廃止コマンドのガイダンス表示"
+    input:
+      type: "command"
+      arguments: ["--validate-only"]
+      content: "usacloud iso-image list" 
+    expected:
+      exit_code: 1
+      error_contains:
+        - "iso-image"
+        - "廃止"
+        - "cdrom"
+
+  - name: "Case sensitivity check"
+    description: "大文字小文字の区別チェック"
+    input:
+      type: "command"
+      arguments: ["--validate-only"]
+      content: "usacloud Server list"
+    expected:
+      exit_code: 1
+      error_contains:
+        - "Server"
+        - "有効なusacloudコマンドではありません"
+        - "server"
+
+  - name: "Multiple typos in single command"
+    description: "1つのコマンドに複数のtypoがある場合"
+    input:
+      type: "command"
+      arguments: ["--validate-only"]
+      content: "usacloud serv lst"
+    expected:
+      exit_code: 1
+      error_contains:
+        - "serv"
+        - "有効なusacloudコマンドではありません"

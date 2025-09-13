@@ -1,0 +1,57 @@
+{
+  "transform_output": "#!/bin/bash\n# Beginner workflow scenario - common tasks for new users\n\necho \"Starting beginner workflow...\"\n\n# Basic server operations - what beginners typically do first\nusacloud server list\nusacloud server list --output-type json  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/\nusacloud server create --name \"my-first-server\"\nusacloud server read 123456789\n\n# Disk management - second most common operations\nusacloud disk list\nusacloud disk create --name \"my-disk\" --size 20\nusacloud disk connect --server-id 123456789\n\n# Network setup - often confusing for beginners\nusacloud switch list\nusacloud switch create --name \"my-switch\"\n\n# Archive operations - backup and restore\nusacloud archive list\nusacloud archive create --name \"backup-$(date +%Y%m%d)\"\n\n# SSH key management - security basics\nusacloud ssh-key list\nusacloud ssh-key create --name \"my-key\"\n\n# Database setup - advanced operations\nusacloud database list\nusacloud database create --name \"my-db\"\n\n# Load balancer - for scaling\nusacloud loadbalancer list\n\n# Monitoring and management\nusacloud server monitor --server-id 123456789\nusacloud disk monitor --disk-id 123456789\n\n# Cleanup operations\nusacloud server shutdown --server-id 123456789\nusacloud disk disconnect --server-id 123456789\n\necho \"Beginner workflow completed\"",
+  "transform_stats": {
+    "total_lines": 44,
+    "processed_lines": 42,
+    "transformed_lines": 1,
+    "skipped_lines": 2,
+    "rules_applied": [
+      "output_format_csv_to_json"
+    ]
+  },
+  "validation_results": [
+    {
+      "line_number": 8,
+      "original_line": "usacloud server list --output-type csv",
+      "validation_status": "warning",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        }
+      ]
+    }
+  ],
+  "validation_summary": {
+    "total_issues": 1,
+    "errors": 0,
+    "warnings": 1,
+    "suggestions": 1,
+    "deprecated_commands": 0
+  },
+  "error_messages": null,
+  "warning_messages": null,
+  "suggestions": [
+    {
+      "line_number": 8,
+      "original_command": "usacloud server list --output-type csv",
+      "suggested_command": "usacloud server list --output-type json",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    }
+  ],
+  "deprecation_warnings": null,
+  "help_output": "🔍 検出された問題と解決方法:\n\n行 8: usacloud server list --output-type csv\n  • csv出力形式は非推奨です。json形式の使用を推奨します。\n    推奨: --output-type json\n\n",
+  "interactive_output": "",
+  "test_metadata": {
+    "test_name": "BeginnerWorkflow",
+    "input_file": "beginner_scenario.sh",
+    "config_used": "beginner.conf",
+    "test_date": "2025-09-12T13:19:11Z",
+    "tool_version": "1.9.0",
+    "language": "ja",
+    "color_enabled": false
+  }
+}

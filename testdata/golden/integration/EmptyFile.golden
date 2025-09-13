@@ -1,0 +1,33 @@
+{
+  "transform_output": "#!/bin/bash\n# Empty test file for edge case testing",
+  "transform_stats": {
+    "total_lines": 2,
+    "processed_lines": 0,
+    "transformed_lines": 0,
+    "skipped_lines": 2,
+    "rules_applied": []
+  },
+  "validation_results": null,
+  "validation_summary": {
+    "total_issues": 0,
+    "errors": 0,
+    "warnings": 0,
+    "suggestions": 0,
+    "deprecated_commands": 0
+  },
+  "error_messages": null,
+  "warning_messages": null,
+  "suggestions": null,
+  "deprecation_warnings": null,
+  "help_output": "",
+  "interactive_output": "",
+  "test_metadata": {
+    "test_name": "EmptyFile",
+    "input_file": "empty.sh",
+    "config_used": "default.conf",
+    "test_date": "2025-09-12T21:32:02Z",
+    "tool_version": "1.9.0",
+    "language": "ja",
+    "color_enabled": false
+  }
+}

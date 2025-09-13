@@ -1,0 +1,67 @@
+[
+  {
+    "name": "basic_output_format_transformation",
+    "description": "Transform CSV output format to JSON",
+    "input": "usacloud server list --output-type csv",
+    "expected_output": "usacloud server list --output-type json # usacloud-update: csv→json変換",
+    "expected_stats": null,
+    "tags": [
+      "output-format",
+      "basic"
+    ],
+    "category": "transformation",
+    "priority": "high"
+  },
+  {
+    "name": "deprecated_resource_transformation",
+    "description": "Transform deprecated iso-image to cdrom",
+    "input": "usacloud iso-image list",
+    "expected_output": "usacloud cdrom list # usacloud-update: iso-image→cdrom変換",
+    "expected_stats": null,
+    "tags": [
+      "deprecated",
+      "resource"
+    ],
+    "category": "transformation",
+    "priority": "high"
+  },
+  {
+    "name": "selector_to_argument_transformation",
+    "description": "Transform selector to direct argument",
+    "input": "usacloud server read --selector name=test",
+    "expected_output": "usacloud server read test # usacloud-update: --selector削除",
+    "expected_stats": null,
+    "tags": [
+      "selector",
+      "argument"
+    ],
+    "category": "transformation",
+    "priority": "medium"
+  },
+  {
+    "name": "zone_format_normalization",
+    "description": "Normalize zone parameter format",
+    "input": "usacloud server list --zone = all",
+    "expected_output": "usacloud server list --zone=all # usacloud-update: スペース除去",
+    "expected_stats": null,
+    "tags": [
+      "zone",
+      "format"
+    ],
+    "category": "transformation",
+    "priority": "low"
+  },
+  {
+    "name": "complex_multi_line_transformation",
+    "description": "Transform complex multi-line script",
+    "input": "#!/bin/bash\nusacloud server list --output-type csv\nusacloud iso-image list --output-type tsv\nusacloud server read --selector name=test",
+    "expected_output": "#!/bin/bash\nusacloud server list --output-type json # usacloud-update: csv→json変換\nusacloud cdrom list --output-type json # usacloud-update: iso-image→cdrom変換, tsv→json変換\nusacloud server read test # usacloud-update: --selector削除",
+    "expected_stats": null,
+    "tags": [
+      "multi-line",
+      "complex"
+    ],
+    "category": "transformation",
+    "priority": "high"
+  }
+]

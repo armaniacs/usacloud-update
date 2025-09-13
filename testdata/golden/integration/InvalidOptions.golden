@@ -1,0 +1,33 @@
+{
+  "transform_output": "#!/bin/bash\n# Invalid options test file for error scenarios\n\necho \"Testing invalid options scenarios...\"\n\n# Invalid flags and options\nusacloud server list --invalid-flag\nusacloud disk create --wrong-option value\nusacloud database list --non-existent-param\n\n# Malformed commands\nusacloud server --incomplete\nusacloud disk\nusacloud \n\n# Wrong option formats\nusacloud server list --output-type=invalid-format\nusacloud disk list --zone=nonexistent-zone\nusacloud database create --size=-100\n\n# Mixed valid/invalid in same command\nusacloud server list --output-type json --invalid-option test\n\n# Completely wrong syntax\nusacloud server list --\nusacloud disk create --name\nusacloud database --invalid\n\necho \"Invalid options test completed\"",
+  "transform_stats": {
+    "total_lines": 29,
+    "processed_lines": 27,
+    "transformed_lines": 0,
+    "skipped_lines": 2,
+    "rules_applied": []
+  },
+  "validation_results": null,
+  "validation_summary": {
+    "total_issues": 0,
+    "errors": 0,
+    "warnings": 0,
+    "suggestions": 0,
+    "deprecated_commands": 0
+  },
+  "error_messages": null,
+  "warning_messages": null,
+  "suggestions": null,
+  "deprecation_warnings": null,
+  "help_output": "✅ 問題は検出されませんでした。",
+  "interactive_output": "",
+  "test_metadata": {
+    "test_name": "InvalidOptions",
+    "input_file": "invalid_options.sh",
+    "config_used": "default.conf",
+    "test_date": "2025-09-12T13:14:48Z",
+    "tool_version": "1.9.0",
+    "language": "ja",
+    "color_enabled": false
+  }
+}

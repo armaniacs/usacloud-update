@@ -1,0 +1,97 @@
+{
+  "transform_output": "#!/bin/bash\n# 問題のあるスクリプトサンプル\n# 厳格モードでテストするためのスクリプト\n\n# タイポエラー\nusacloud serv list\nusacloud databse list\n\n# 廃止コマンドエラー\nusacloud cdrom list  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nusacloud startup-script list\n\n# 無効なオプション\nusacloud server list --invalid-option\nusacloud disk create --nonexistent-flag\n\n# 非推奨オプション\nusacloud server list --output-type json  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/\nusacloud disk list --output-type tsv\n\n# 構文エラー\nusacloud server list --zone = invalid-zone\nusacloud disk create --size=\n\n# 複数エラーの組み合わせ\nusacloud serv lst --invalid-option --output-type json  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/",
+  "transform_stats": {
+    "total_lines": 26,
+    "processed_lines": 24,
+    "transformed_lines": 3,
+    "skipped_lines": 2,
+    "rules_applied": [
+      "resource_rename_iso_image",
+      "output_format_csv_to_json",
+      "output_format_csv_to_json"
+    ]
+  },
+  "validation_results": [
+    {
+      "line_number": 10,
+      "original_line": "usacloud iso-image list",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 18,
+      "original_line": "usacloud server list --output-type csv",
+      "validation_status": "warning",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        }
+      ]
+    },
+    {
+      "line_number": 26,
+      "original_line": "usacloud serv lst --invalid-option --output-type csv",
+      "validation_status": "warning",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        }
+      ]
+    }
+  ],
+  "validation_summary": {
+    "total_issues": 3,
+    "errors": 1,
+    "warnings": 2,
+    "suggestions": 2,
+    "deprecated_commands": 1
+  },
+  "error_messages": [
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso-image' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    }
+  ],
+  "warning_messages": null,
+  "suggestions": [
+    {
+      "line_number": 18,
+      "original_command": "usacloud server list --output-type csv",
+      "suggested_command": "usacloud server list --output-type json",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    },
+    {
+      "line_number": 26,
+      "original_command": "usacloud serv lst --invalid-option --output-type csv",
+      "suggested_command": "usacloud serv lst --invalid-option --output-type json",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    }
+  ],
+  "deprecation_warnings": null,
+  "help_output": "",
+  "interactive_output": "",
+  "test_metadata": {
+    "test_name": "StrictModeValidation",
+    "input_file": "problematic_script.sh",
+    "config_used": "strict.conf",
+    "test_date": "2025-09-10T07:47:34Z",
+    "tool_version": "1.9.0",
+    "language": "ja",
+    "color_enabled": false
+  }
+}

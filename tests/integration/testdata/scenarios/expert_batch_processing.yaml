@@ -1,0 +1,78 @@
+name: "エキスパートユーザーのバッチ処理シナリオ"
+description: "エキスパートユーザーの効率的なバッチ処理機能のテスト"
+
+scenarios:
+  - name: "Minimal output mode"
+    description: "エキスパートプロファイルでの最小出力"
+    input:
+      type: "command"
+      arguments: ["--validate-only"]
+      content: "usacloud server list"
+    expected:
+      exit_code: 0
+      output_not_contains:
+        - "詳細"
+        - "ヘルプ"
+
+  - name: "Strict validation mode"
+    description: "厳密検証モードでの動作"
+    input:
+      type: "command"
+      arguments: ["--strict-validation", "--validate-only"]
+      content: "usacloud iso-image list"
+    expected:
+      exit_code: 1
+      error_contains:
+        - "iso-image"
+        - "廃止"
+        - "cdrom"
+
+  - name: "Parallel processing enablement"
+    description: "並列処理が有効になることの確認"
+    input:
+      type: "command"
+      arguments: ["--validate-only"]
+      content: "usacloud server list\nusacloud disk list\nusacloud database list"
+    expected:
+      exit_code: 0
+
+  - name: "Reduced suggestions count"
+    description: "エキスパートモードでの提案数削減"
+    input:
+      type: "command"
+      arguments: ["--validate-only"]
+      content: "usacloud invalid-command"
+    expected:
+      exit_code: 1
+      error_contains:
+        - "invalid-command"
+        - "有効なusacloudコマンドではありません"
+
+  - name: "No progress display"
+    description: "進捗表示の無効化"
+    input:
+      type: "command"
+      arguments: []
+      content: "usacloud server list\nusacloud disk list"
+    expected:
+      exit_code: 0
+      output_not_contains:
+        - "進捗"
+        - "Progress"
+        - "%"
+
+  - name: "Batch error handling"
+    description: "バッチ処理でのエラーハンドリング"
+    input:
+      type: "command"
+      arguments: ["--validate-only"]
+      content: |
+        usacloud server list
+        usacloud invalid-command
+        usacloud disk list
+        usacloud another-invalid
+    expected:
+      exit_code: 1
+      error_contains:
+        - "invalid-command"
+        - "another-invalid"

@@ -1,0 +1,174 @@
+{
+  "transform_output": "#!/bin/bash\n# Special characters test file - for testing unicode, symbols, and encoding\n\necho \"Testing special characters in usacloud commands\"\n\n# Commands with Unicode characters in names and selectors\nusacloud server list --selector \"Name=サーバー-テスト\" --output-type json  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/\nusacloud disk create --name \"データ-ディスク-日本語\" --output-type json  \nusacloud database list --selector \"Tags.環境=本番\" --zone = all\n\n# Commands with various symbols and punctuation\nusacloud server list --selector \"Name~web-[0-9]+\" --output-type tsv\nusacloud disk list --selector \"Tags.Project=e-commerce@2024\" --zone= tk1a\nusacloud database list --selector \"Size\u003e=100GB \u0026\u0026 Status!=stopped\"\n\n# Deprecated commands with special characters\nusacloud cdrom list --selector \"Name~バックアップ-*\" --output-type json  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nusacloud startup-script create --name \"初期化スクリプト#1\" \nusacloud ipv4 list --selector \"Address~192.168.*\"\n\n# Product commands with symbols\nusacloud product-server list --selector \"Price\u003c¥10000\" --output-type json\nusacloud product-disk list --selector \"Type=SSD \u0026 Speed\u003e=1000IOPS\"\n\n# Commands with escaped characters\nusacloud server list --selector \"Description=\\\"High-performance server (\u003e= 16GB RAM)\\\"\" --output-type json  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/\nusacloud disk create --name \"backup_$(date +%Y-%m-%d_%H:%M:%S)\" --output-type json\n\n# Mixed encoding scenarios\nusacloud server list --selector \"Tags.Owner=山田太郎\" --zone = \"東京1a\" --output-type json  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/\nusacloud database list --selector \"Name~テスト-データベース-[α-ω]+\" --output-type json\n\n# Special shell characters that need careful handling\nusacloud server list --selector 'Name=\"test|prod\"' --output-type json  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/\nusacloud disk list --selector \"Size\u003e100 \u0026\u0026 Name!~temp*\" --output-type json\nusacloud database list --selector \"Tags.Environment in [prod,staging]\" --zone = all\n\n# Mathematical and technical symbols\nusacloud server list --selector \"CPU\u003e=2 ∧ Memory\u003e=4096MB\" --output-type json  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/\nusacloud disk list --selector \"IOPS≥1000 ∨ Size≥500GB\" --output-type json\n\n# Emoji and modern Unicode (edge case)\nusacloud server create --name \"🚀production-server-2024\" --tags \"Environment=prod 🏷️\"\nusacloud disk list --selector \"Tags.Status=✅running\" --output-type json\n\necho \"Special characters test completed ✅\"",
+  "transform_stats": {
+    "total_lines": 46,
+    "processed_lines": 44,
+    "transformed_lines": 7,
+    "skipped_lines": 2,
+    "rules_applied": [
+      "output_format_csv_to_json",
+      "output_format_csv_to_json",
+      "resource_rename_iso_image",
+      "output_format_csv_to_json",
+      "output_format_csv_to_json",
+      "output_format_csv_to_json",
+      "output_format_csv_to_json"
+    ]
+  },
+  "validation_results": [
+    {
+      "line_number": 7,
+      "original_line": "usacloud server list --selector \"Name=サーバー-テスト\" --output-type csv",
+      "validation_status": "warning",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        }
+      ]
+    },
+    {
+      "line_number": 17,
+      "original_line": "usacloud iso-image list --selector \"Name~バックアップ-*\" --output-type csv",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        },
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 26,
+      "original_line": "usacloud server list --selector \"Description=\\\"High-performance server (\u003e= 16GB RAM)\\\"\" --output-type csv",
+      "validation_status": "warning",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        }
+      ]
+    },
+    {
+      "line_number": 30,
+      "original_line": "usacloud server list --selector \"Tags.Owner=山田太郎\" --zone = \"東京1a\" --output-type csv",
+      "validation_status": "warning",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        }
+      ]
+    },
+    {
+      "line_number": 34,
+      "original_line": "usacloud server list --selector 'Name=\"test|prod\"' --output-type csv",
+      "validation_status": "warning",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        }
+      ]
+    },
+    {
+      "line_number": 39,
+      "original_line": "usacloud server list --selector \"CPU\u003e=2 ∧ Memory\u003e=4096MB\" --output-type csv",
+      "validation_status": "warning",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        }
+      ]
+    }
+  ],
+  "validation_summary": {
+    "total_issues": 7,
+    "errors": 1,
+    "warnings": 6,
+    "suggestions": 6,
+    "deprecated_commands": 1
+  },
+  "error_messages": [
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso-image' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    }
+  ],
+  "warning_messages": null,
+  "suggestions": [
+    {
+      "line_number": 7,
+      "original_command": "usacloud server list --selector \"Name=サーバー-テスト\" --output-type csv",
+      "suggested_command": "usacloud server list --selector \"Name=サーバー-テスト\" --output-type json",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    },
+    {
+      "line_number": 17,
+      "original_command": "usacloud iso-image list --selector \"Name~バックアップ-*\" --output-type csv",
+      "suggested_command": "usacloud iso-image list --selector \"Name~バックアップ-*\" --output-type json",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    },
+    {
+      "line_number": 26,
+      "original_command": "usacloud server list --selector \"Description=\\\"High-performance server (\u003e= 16GB RAM)\\\"\" --output-type csv",
+      "suggested_command": "usacloud server list --selector \"Description=\\\"High-performance server (\u003e= 16GB RAM)\\\"\" --output-type json",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    },
+    {
+      "line_number": 30,
+      "original_command": "usacloud server list --selector \"Tags.Owner=山田太郎\" --zone = \"東京1a\" --output-type csv",
+      "suggested_command": "usacloud server list --selector \"Tags.Owner=山田太郎\" --zone = \"東京1a\" --output-type json",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    },
+    {
+      "line_number": 34,
+      "original_command": "usacloud server list --selector 'Name=\"test|prod\"' --output-type csv",
+      "suggested_command": "usacloud server list --selector 'Name=\"test|prod\"' --output-type json",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    },
+    {
+      "line_number": 39,
+      "original_command": "usacloud server list --selector \"CPU\u003e=2 ∧ Memory\u003e=4096MB\" --output-type csv",
+      "suggested_command": "usacloud server list --selector \"CPU\u003e=2 ∧ Memory\u003e=4096MB\" --output-type json",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    }
+  ],
+  "deprecation_warnings": null,
+  "help_output": "",
+  "interactive_output": "",
+  "test_metadata": {
+    "test_name": "SpecialCharacters",
+    "input_file": "special_characters.sh",
+    "config_used": "default.conf",
+    "test_date": "2025-09-12T21:32:02Z",
+    "tool_version": "1.9.0",
+    "language": "ja",
+    "color_enabled": false
+  }
+}

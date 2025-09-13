@@ -1,0 +1,14 @@
+{
+  "peak_usage": 491000,
+  "total_allocated": 1267583,
+  "gc_cycles": 11,
+  "allocation_pattern": {},
+  "leak_detection": {
+    "suspected_leaks": [
+      "Heap growth exceeds threshold"
+    ],
+    "unreleased_objects": 0,
+    "memory_growth": 65536,
+    "confidence": 0.15403418385574338
+  }
+}

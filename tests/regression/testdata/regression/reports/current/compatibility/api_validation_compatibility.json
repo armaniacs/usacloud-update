@@ -1,0 +1,7 @@
+{
+  "function": "validation.Validator.Validate",
+  "parameters": "usacloud server list",
+  "result": true,
+  "error": "",
+  "execution_time": 42
+}

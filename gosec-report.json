@@ -1,0 +1,1884 @@
+{
+	"Golang errors": {},
+	"Issues": [
+		{
+			"severity": "HIGH",
+			"confidence": "MEDIUM",
+			"cwe": {
+				"id": "190",
+				"url": "https://cwe.mitre.org/data/definitions/190.html"
+			},
+			"rule_id": "G115",
+			"details": "integer overflow conversion uint64 -\u003e int64",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/performance/performance_test_framework.go",
+			"code": "138: \t\tGCCount:        finalMemStats.NumGC - initialMemStats.NumGC,\n139: \t\tGCPauseTime:    time.Duration(finalMemStats.PauseTotalNs - initialMemStats.PauseTotalNs),\n140: \t}\n",
+			"line": "139",
+			"column": "32",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "HIGH",
+			"confidence": "MEDIUM",
+			"cwe": {
+				"id": "190",
+				"url": "https://cwe.mitre.org/data/definitions/190.html"
+			},
+			"rule_id": "G115",
+			"details": "integer overflow conversion uint64 -\u003e int64",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/extended_steps.go",
+			"code": "579: \truntime.ReadMemStats(\u0026m)\n580: \treturn int64(m.Alloc)\n581: }\n",
+			"line": "580",
+			"column": "14",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "HIGH",
+			"confidence": "MEDIUM",
+			"cwe": {
+				"id": "338",
+				"url": "https://cwe.mitre.org/data/definitions/338.html"
+			},
+			"rule_id": "G404",
+			"details": "Use of weak random number generator (math/rand or math/rand/v2 instead of crypto/rand)",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/testing/golden_generator.go",
+			"code": "53: \treturn \u0026GoldenDataGenerator{\n54: \t\trand: rand.New(rand.NewSource(time.Now().UnixNano())),\n55: \t\tcommandPatterns: []CommandPattern{\n",
+			"line": "54",
+			"column": "9",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "HIGH",
+			"confidence": "MEDIUM",
+			"cwe": {
+				"id": "338",
+				"url": "https://cwe.mitre.org/data/definitions/338.html"
+			},
+			"rule_id": "G404",
+			"details": "Use of weak random number generator (math/rand or math/rand/v2 instead of crypto/rand)",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/sandbox/retry.go",
+			"code": "192: \t\tbaseDelay := time.Duration(math.Pow(2, float64(attempt-1))) * config.BaseDelay\n193: \t\tjitter := time.Duration(rand.Float64() * float64(baseDelay) * 0.1) // 10%のジッター\n194: \t\tdelay = baseDelay + jitter\n",
+			"line": "193",
+			"column": "27",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "HIGH",
+			"confidence": "LOW",
+			"cwe": {
+				"id": "798",
+				"url": "https://cwe.mitre.org/data/definitions/798.html"
+			},
+			"rule_id": "G101",
+			"details": "Potential hardcoded credentials",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/types.go",
+			"code": "101: \tConfigKeyAccessToken       = \"SAKURACLOUD_ACCESS_TOKEN\"\n102: \tConfigKeyAccessTokenSecret = \"SAKURACLOUD_ACCESS_TOKEN_SECRET\"\n103: \tConfigKeyZone              = \"SAKURACLOUD_ZONE\"\n",
+			"line": "102",
+			"column": "2",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "HIGH",
+			"confidence": "LOW",
+			"cwe": {
+				"id": "798",
+				"url": "https://cwe.mitre.org/data/definitions/798.html"
+			},
+			"rule_id": "G101",
+			"details": "Potential hardcoded credentials",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/types.go",
+			"code": "100: const (\n101: \tConfigKeyAccessToken       = \"SAKURACLOUD_ACCESS_TOKEN\"\n102: \tConfigKeyAccessTokenSecret = \"SAKURACLOUD_ACCESS_TOKEN_SECRET\"\n",
+			"line": "101",
+			"column": "2",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "78",
+				"url": "https://cwe.mitre.org/data/definitions/78.html"
+			},
+			"rule_id": "G204",
+			"details": "Subprocess launched with variable",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/integration/integration_test_framework.go",
+			"code": "65: \n66: \tcmd := exec.Command(\"go\", cmdArgs...)\n67: \tcmd.Dir = rootDir\n",
+			"line": "66",
+			"column": "9",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "78",
+				"url": "https://cwe.mitre.org/data/definitions/78.html"
+			},
+			"rule_id": "G204",
+			"details": "Subprocess launched with a potential tainted input or cmd arguments",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/integration/integration_test_framework.go",
+			"code": "454: \n455: \tcmd := exec.Command(its.binaryPath, fullArgs...)\n456: \tstdout, stderr, err := its.runCommand(cmd)\n",
+			"line": "455",
+			"column": "9",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "78",
+				"url": "https://cwe.mitre.org/data/definitions/78.html"
+			},
+			"rule_id": "G204",
+			"details": "Subprocess launched with a potential tainted input or cmd arguments",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/integration/integration_test_framework.go",
+			"code": "331: \n332: \tcmd := exec.Command(its.binaryPath, args...)\n333: \tif scenario.Input.Content != \"\" {\n",
+			"line": "332",
+			"column": "9",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "78",
+				"url": "https://cwe.mitre.org/data/definitions/78.html"
+			},
+			"rule_id": "G204",
+			"details": "Subprocess launched with a potential tainted input or cmd arguments",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/integration/integration_test_framework.go",
+			"code": "325: \n326: \treturn exec.Command(its.binaryPath, args...)\n327: }\n",
+			"line": "326",
+			"column": "9",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "78",
+				"url": "https://cwe.mitre.org/data/definitions/78.html"
+			},
+			"rule_id": "G204",
+			"details": "Subprocess launched with a potential tainted input or cmd arguments",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/integration/integration_test_framework.go",
+			"code": "308: \n309: \treturn exec.Command(its.binaryPath, args...)\n310: }\n",
+			"line": "309",
+			"column": "9",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "78",
+				"url": "https://cwe.mitre.org/data/definitions/78.html"
+			},
+			"rule_id": "G204",
+			"details": "Subprocess launched with a potential tainted input or cmd arguments",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/e2e/e2e_test_framework.go",
+			"code": "203: \targs := append([]string{}, options.Arguments...)\n204: \tcmd := exec.Command(e2e.binaryPath, args...)\n205: \n",
+			"line": "204",
+			"column": "9",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "78",
+				"url": "https://cwe.mitre.org/data/definitions/78.html"
+			},
+			"rule_id": "G204",
+			"details": "Subprocess launched with a potential tainted input or cmd arguments",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/e2e/e2e_test_framework.go",
+			"code": "143: \t// バイナリをビルド\n144: \tbuildCmd := exec.Command(\"go\", \"build\", \"-o\", e2e.binaryPath, \"./cmd/usacloud-update\")\n145: \tbuildCmd.Dir = projectRoot\n",
+			"line": "144",
+			"column": "14",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "78",
+				"url": "https://cwe.mitre.org/data/definitions/78.html"
+			},
+			"rule_id": "G204",
+			"details": "Subprocess launched with a potential tainted input or cmd arguments",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/sandbox/validation.go",
+			"code": "415: \t// 簡単なリソース一覧取得でゾーンアクセスをテスト\n416: \tcmd := exec.Command(\"usacloud\", \"zone\", \"list\", \"--zone\", c.zone)\n417: \toutput, err := cmd.Output()\n",
+			"line": "416",
+			"column": "9",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "78",
+				"url": "https://cwe.mitre.org/data/definitions/78.html"
+			},
+			"rule_id": "G204",
+			"details": "Subprocess launched with a potential tainted input or cmd arguments",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/sandbox/executor.go",
+			"code": "225: \t// Create command\n226: \tcmd := exec.CommandContext(ctx, args[0], args[1:]...)\n227: \tcmd.Env = e.config.GetUsacloudEnv()\n",
+			"line": "226",
+			"column": "9",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "78",
+				"url": "https://cwe.mitre.org/data/definitions/78.html"
+			},
+			"rule_id": "G204",
+			"details": "Subprocess launched with a potential tainted input or cmd arguments",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/error_scenarios.go",
+			"code": "438: \n439: \tcmd := exec.Command(parts[0], parts[1:]...)\n440: \tcmd.Env = os.Environ()\n",
+			"line": "439",
+			"column": "9",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/regression/regression_test_framework.go",
+			"code": "300: \tcompatibilityPath := filepath.Join(suite.baselineDir, \"compatibility\", \"baseline.json\")\n301: \tif data, err := os.ReadFile(compatibilityPath); err == nil {\n302: \t\tvar baseline CompatibilityBaseline\n",
+			"line": "301",
+			"column": "18",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/regression/regression_test_framework.go",
+			"code": "291: \tperformancePath := filepath.Join(suite.baselineDir, \"performance\", \"baseline.json\")\n292: \tif data, err := os.ReadFile(performancePath); err == nil {\n293: \t\tvar baseline PerformanceBaseline\n",
+			"line": "292",
+			"column": "18",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/regression/regression_test_framework.go",
+			"code": "282: \tfunctionalPath := filepath.Join(suite.baselineDir, \"functional\", \"baseline.json\")\n283: \tif data, err := os.ReadFile(functionalPath); err == nil {\n284: \t\tvar baseline FunctionalBaseline\n",
+			"line": "283",
+			"column": "18",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/performance/performance_test_framework.go",
+			"code": "198: func (pts *PerformanceTestSuite) countLines(filename string) int {\n199: \tfile, err := os.Open(filename)\n200: \tif err != nil {\n",
+			"line": "199",
+			"column": "15",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/integration/integration_test_framework.go",
+			"code": "177: \tpath := filepath.Join(its.testDataDir, filename)\n178: \tdata, err := os.ReadFile(path)\n179: \tif err != nil {\n",
+			"line": "178",
+			"column": "15",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/e2e/e2e_test_framework.go",
+			"code": "485: \t\t\tif len(fileExp.ContentContains) \u003e 0 {\n486: \t\t\t\tcontent, err := ioutil.ReadFile(fullPath)\n487: \t\t\t\tif err != nil {\n",
+			"line": "486",
+			"column": "21",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/validation/testing_utils.go",
+			"code": "266: \tpath := filepath.Join(\"testdata\", filename)\n267: \tfileData, err := os.ReadFile(path)\n268: \tif err != nil {\n",
+			"line": "267",
+			"column": "19",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/validation/testing_utils.go",
+			"code": "28: \tpath := filepath.Join(th.dataDir, filename)\n29: \tdata, err := os.ReadFile(path)\n30: \tif err != nil {\n",
+			"line": "29",
+			"column": "15",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/tui/filter/system.go",
+			"code": "155: func (fs *FilterSystem) LoadConfig(path string) error {\n156: \tdata, err := os.ReadFile(path)\n157: \tif err != nil {\n",
+			"line": "156",
+			"column": "15",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/tui/filter/preset.go",
+			"code": "281: \n282: \tdata, err := ioutil.ReadFile(filename)\n283: \tif err != nil {\n",
+			"line": "282",
+			"column": "15",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/tui/filter/preset.go",
+			"code": "209: func (pm *PresetManager) ImportPresets(filename string) error {\n210: \tdata, err := ioutil.ReadFile(filename)\n211: \tif err != nil {\n",
+			"line": "210",
+			"column": "15",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/testing/golden_test_framework.go",
+			"code": "476: \t// 既存ゴールデンファイル読み込み\n477: \texpectedJSON, err := ioutil.ReadFile(goldenPath)\n478: \tif err != nil {\n",
+			"line": "477",
+			"column": "23",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/testing/golden_test_framework.go",
+			"code": "168: \tinputPath := filepath.Join(gts.testDataDir, \"inputs\", options.InputFile)\n169: \tinput, err := ioutil.ReadFile(inputPath)\n170: \tif err != nil {\n",
+			"line": "169",
+			"column": "16",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/security/audit.go",
+			"code": "301: \t// Create new log file\n302: \tnewFile, err := os.OpenFile(baseName, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0640)\n303: \tif err != nil {\n",
+			"line": "302",
+			"column": "18",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/scanner/detector.go",
+			"code": "162: func (ca *ContentAnalyzer) readFileContent(filePath string) (string, error) {\n163: \tfile, err := os.Open(filePath)\n164: \tif err != nil {\n",
+			"line": "163",
+			"column": "15",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/sandbox/validation.go",
+			"code": "480: \t// 設定ファイルの内容をチェック（基本的な存在確認のみ）\n481: \tcontent, err := os.ReadFile(foundPath)\n482: \tif err != nil {\n",
+			"line": "481",
+			"column": "18",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/storage.go",
+			"code": "376: func (fs *FileStorage) ImportFromFile(importPath string) error {\n377: \tdata, err := os.ReadFile(importPath)\n378: \tif err != nil {\n",
+			"line": "377",
+			"column": "15",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/storage.go",
+			"code": "301: func (fs *FileStorage) Restore(backupPath string) error {\n302: \tdata, err := os.ReadFile(backupPath)\n303: \tif err != nil {\n",
+			"line": "302",
+			"column": "15",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/storage.go",
+			"code": "185: func readYAMLFile(filename string, data interface{}) error {\n186: \tfile, err := os.Open(filename)\n187: \tif err != nil {\n",
+			"line": "186",
+			"column": "15",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/storage.go",
+			"code": "100: \n101: \tdata, err := os.ReadFile(defaultFile)\n102: \tif err != nil {\n",
+			"line": "101",
+			"column": "15",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/file.go",
+			"code": "101: \n102: \tfile, err := os.Open(configPath)\n103: \tif err != nil {\n",
+			"line": "102",
+			"column": "15",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/env.go",
+			"code": "186: func loadEnvFile(filename string) error {\n187: \tfile, err := os.Open(filename)\n188: \tif err != nil {\n",
+			"line": "187",
+			"column": "15",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/config_migrator.go",
+			"code": "185: \n186: \tbackupFile, err := os.Create(backupPath)\n187: \tif err != nil {\n",
+			"line": "186",
+			"column": "21",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/config_migrator.go",
+			"code": "175: func (cm *ConfigMigrator) backupConfig(sourcePath, backupPath string) error {\n176: \tsourceFile, err := os.Open(sourcePath)\n177: \tif err != nil {\n",
+			"line": "176",
+			"column": "21",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/config_migrator.go",
+			"code": "137: \n138: \tfile, err := os.Open(envPath)\n139: \tif err != nil {\n",
+			"line": "138",
+			"column": "15",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/config_migrator.go",
+			"code": "109: \n110: \tfile, err := os.Open(configPath)\n111: \tif err != nil {\n",
+			"line": "110",
+			"column": "15",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/error_scenarios.go",
+			"code": "272: \t\t\t\tconfigFile := configDir + \"/usacloud-update.conf\"\n273: \t\t\t\tcontent, err := os.ReadFile(configFile)\n274: \t\t\t\tif err != nil {\n",
+			"line": "273",
+			"column": "21",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/error_scenarios.go",
+			"code": "228: \t\t\t\tconfigFile := configDir + \"/usacloud-update.conf\"\n229: \t\t\t\t_, err := os.ReadFile(configFile)\n230: \t\t\t\treturn err\n",
+			"line": "229",
+			"column": "15",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/error_scenarios.go",
+			"code": "159: \t\t\t\t// Try to read the file\n160: \t\t\t\t_, err := os.ReadFile(filename)\n161: \t\t\t\treturn err\n",
+			"line": "160",
+			"column": "15",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "22",
+				"url": "https://cwe.mitre.org/data/definitions/22.html"
+			},
+			"rule_id": "G304",
+			"details": "Potential file inclusion via variable",
+			"file": "/Users/yaar/Playground/usacloud-update/cmd/usacloud-update/main.go",
+			"code": "1254: func readFileLines(filePath string) ([]string, error) {\n1255: \tf, err := os.Open(filePath)\n1256: \tif err != nil {\n",
+			"line": "1255",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G302",
+			"details": "Expect file permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/e2e/e2e_test_framework.go",
+			"code": "152: \t// 実行可能にする\n153: \tif err := os.Chmod(e2e.binaryPath, 0755); err != nil {\n154: \t\te2e.t.Fatalf(\"バイナリの実行権限設定に失敗: %v\", err)\n",
+			"line": "153",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G302",
+			"details": "Expect file permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/security/audit.go",
+			"code": "301: \t// Create new log file\n302: \tnewFile, err := os.OpenFile(baseName, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0640)\n303: \tif err != nil {\n",
+			"line": "302",
+			"column": "18",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G302",
+			"details": "Expect file permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/security/audit.go",
+			"code": "72: \t// Open log file\n73: \tlogFile, err := os.OpenFile(config.LogFile, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0640)\n74: \tif err != nil {\n",
+			"line": "73",
+			"column": "18",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G302",
+			"details": "Expect file permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/error_scenarios.go",
+			"code": "175: \t\t\t\t\t// Restore permissions and delete file\n176: \t\t\t\t\tos.Chmod(filename, 0644)\n177: \t\t\t\t\tos.Remove(filename)\n",
+			"line": "176",
+			"column": "6",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G301",
+			"details": "Expect directory permissions to be 0750 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/regression/regression_test_framework.go",
+			"code": "273: \tfor _, dir := range dirs {\n274: \t\tif err := os.MkdirAll(dir, 0755); err != nil {\n275: \t\t\tsuite.t.Fatalf(\"Failed to create directory %s: %v\", dir, err)\n",
+			"line": "274",
+			"column": "13",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G301",
+			"details": "Expect directory permissions to be 0750 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/e2e/e2e_test_framework.go",
+			"code": "565: \n566: \tif err := os.MkdirAll(dirPath, 0755); err != nil {\n567: \t\te2e.t.Fatalf(\"ディレクトリ作成に失敗 %s: %v\", dirPath, err)\n",
+			"line": "566",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G301",
+			"details": "Expect directory permissions to be 0750 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/e2e/e2e_test_framework.go",
+			"code": "549: \tdir := filepath.Dir(filePath)\n550: \tif err := os.MkdirAll(dir, 0755); err != nil {\n551: \t\te2e.t.Fatalf(\"ディレクトリ作成に失敗 %s: %v\", dir, err)\n",
+			"line": "550",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G301",
+			"details": "Expect directory permissions to be 0750 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/e2e/e2e_test_framework.go",
+			"code": "531: \tdir := filepath.Dir(filePath)\n532: \tif err := os.MkdirAll(dir, 0755); err != nil {\n533: \t\te2e.t.Fatalf(\"ディレクトリ作成に失敗 %s: %v\", dir, err)\n",
+			"line": "532",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G301",
+			"details": "Expect directory permissions to be 0750 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/e2e/e2e_test_framework.go",
+			"code": "169: \tconfigDir := filepath.Join(e2e.tempHome, \".config\", \"usacloud-update\")\n170: \tif err := os.MkdirAll(configDir, 0755); err != nil {\n171: \t\te2e.t.Fatalf(\"設定ディレクトリ作成に失敗: %v\", err)\n",
+			"line": "170",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G301",
+			"details": "Expect directory permissions to be 0750 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/e2e/e2e_test_framework.go",
+			"code": "163: \te2e.tempHome = filepath.Join(e2e.testDir, \"home\")\n164: \tif err := os.MkdirAll(e2e.tempHome, 0755); err != nil {\n165: \t\te2e.t.Fatalf(\"テストホームディレクトリ作成に失敗: %v\", err)\n",
+			"line": "164",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G301",
+			"details": "Expect directory permissions to be 0750 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/validation/testing_utils.go",
+			"code": "42: \n43: \tif err := os.MkdirAll(dir, 0755); err != nil {\n44: \t\tth.t.Fatalf(\"テストディレクトリ作成エラー %s: %v\", dir, err)\n",
+			"line": "43",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G301",
+			"details": "Expect directory permissions to be 0750 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/tui/filter/preset.go",
+			"code": "61: \t// Ensure directory exists\n62: \tif err := os.MkdirAll(baseDir, 0755); err != nil {\n63: \t\treturn nil, fmt.Errorf(\"failed to create preset directory: %w\", err)\n",
+			"line": "62",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G301",
+			"details": "Expect directory permissions to be 0750 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/testing/golden_test_framework.go",
+			"code": "508: \tdir := filepath.Dir(goldenPath)\n509: \tif err := os.MkdirAll(dir, 0755); err != nil {\n510: \t\tgts.t.Fatalf(\"ディレクトリ作成エラー %s: %v\", dir, err)\n",
+			"line": "509",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G301",
+			"details": "Expect directory permissions to be 0750 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/storage.go",
+			"code": "218: func (bs *BackupStorage) Backup() (string, error) {\n219: \tif err := os.MkdirAll(bs.backupDir, 0755); err != nil {\n220: \t\treturn \"\", fmt.Errorf(\"failed to create backup directory: %w\", err)\n",
+			"line": "219",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G301",
+			"details": "Expect directory permissions to be 0750 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/storage.go",
+			"code": "136: \tdir := filepath.Dir(filename)\n137: \tif err := os.MkdirAll(dir, 0755); err != nil {\n138: \t\treturn fmt.Errorf(\"failed to create directory %s: %w\", dir, err)\n",
+			"line": "137",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G301",
+			"details": "Expect directory permissions to be 0750 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/storage.go",
+			"code": "116: \tprofilesDir := fs.getProfilesDir()\n117: \treturn os.MkdirAll(profilesDir, 0755)\n118: }\n",
+			"line": "117",
+			"column": "9",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G301",
+			"details": "Expect directory permissions to be 0750 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/integrated_config.go",
+			"code": "490: \n491: \tif err := os.MkdirAll(filepath.Dir(configPath), 0755); err != nil {\n492: \t\treturn fmt.Errorf(\"設定ディレクトリ作成に失敗: %w\", err)\n",
+			"line": "491",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G301",
+			"details": "Expect directory permissions to be 0750 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/file.go",
+			"code": "223: \tconfigDir := filepath.Dir(configPath)\n224: \tif err := os.MkdirAll(configDir, 0755); err != nil {\n225: \t\treturn fmt.Errorf(\"failed to create config directory: %w\", err)\n",
+			"line": "224",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G301",
+			"details": "Expect directory permissions to be 0750 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/file.go",
+			"code": "63: \tif _, err := os.Stat(dir); os.IsNotExist(err) {\n64: \t\tif err := os.MkdirAll(dir, 0755); err != nil {\n65: \t\t\treturn fmt.Errorf(\"failed to create directory: %w\", err)\n",
+			"line": "64",
+			"column": "13",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G301",
+			"details": "Expect directory permissions to be 0750 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/config_migrator.go",
+			"code": "181: \n182: \tif err := os.MkdirAll(filepath.Dir(backupPath), 0755); err != nil {\n183: \t\treturn err\n",
+			"line": "182",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G306",
+			"details": "Expect WriteFile permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/regression/regression_test_framework.go",
+			"code": "494: \n495: \tif err := os.WriteFile(reportPath, data, 0644); err != nil {\n496: \t\tsuite.t.Errorf(\"Failed to save report: %v\", err)\n",
+			"line": "495",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G306",
+			"details": "Expect WriteFile permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/performance/performance_test_framework.go",
+			"code": "238: \n239: \tif err := os.WriteFile(testFile, []byte(content.String()), 0644); err != nil {\n240: \t\tpts.t.Fatalf(\"テストファイル生成エラー: %v\", err)\n",
+			"line": "239",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G306",
+			"details": "Expect WriteFile permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/integration/integration_test_framework.go",
+			"code": "444: \n445: \tif err := os.WriteFile(testFile, []byte(content.String()), 0644); err != nil {\n446: \t\tits.t.Fatalf(\"テストファイル生成エラー: %v\", err)\n",
+			"line": "445",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G306",
+			"details": "Expect WriteFile permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/integration/integration_test_framework.go",
+			"code": "302: \t\tinputFile := filepath.Join(its.tempDir, \"input.txt\")\n303: \t\tif err := os.WriteFile(inputFile, []byte(scenario.Input.Content), 0644); err != nil {\n304: \t\t\tits.t.Fatalf(\"入力ファイル作成エラー: %v\", err)\n",
+			"line": "303",
+			"column": "13",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G306",
+			"details": "Expect WriteFile permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/integration/integration_test_framework.go",
+			"code": "127: \n128: \tif err := os.WriteFile(its.configPath, []byte(configContent), 0644); err != nil {\n129: \t\tits.t.Fatalf(\"テスト設定ファイル作成エラー: %v\", err)\n",
+			"line": "128",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G306",
+			"details": "Expect WriteFile permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/e2e/e2e_test_framework.go",
+			"code": "554: \t// ファイル作成\n555: \tif err := ioutil.WriteFile(filePath, content, 0644); err != nil {\n556: \t\te2e.t.Fatalf(\"ファイル作成に失敗 %s: %v\", filePath, err)\n",
+			"line": "555",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G306",
+			"details": "Expect WriteFile permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/e2e/e2e_test_framework.go",
+			"code": "536: \t// ファイル作成\n537: \tif err := ioutil.WriteFile(filePath, []byte(content), 0644); err != nil {\n538: \t\te2e.t.Fatalf(\"ファイル作成に失敗 %s: %v\", filePath, err)\n",
+			"line": "537",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G306",
+			"details": "Expect WriteFile permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/validation/testing_utils.go",
+			"code": "51: \n52: \tif err := os.WriteFile(path, jsonData, 0644); err != nil {\n53: \t\tth.t.Fatalf(\"テストファイル作成エラー %s: %v\", path, err)\n",
+			"line": "52",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G306",
+			"details": "Expect WriteFile permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/tui/filter/system.go",
+			"code": "150: \n151: \treturn os.WriteFile(path, data, 0644)\n152: }\n",
+			"line": "151",
+			"column": "9",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G306",
+			"details": "Expect WriteFile permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/tui/filter/preset.go",
+			"code": "270: \n271: \tif err := ioutil.WriteFile(filename, data, 0644); err != nil {\n272: \t\treturn fmt.Errorf(\"failed to write preset file: %w\", err)\n",
+			"line": "271",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G306",
+			"details": "Expect WriteFile permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/tui/filter/preset.go",
+			"code": "200: \n201: \tif err := ioutil.WriteFile(filename, data, 0644); err != nil {\n202: \t\treturn fmt.Errorf(\"failed to write export file: %w\", err)\n",
+			"line": "201",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G306",
+			"details": "Expect WriteFile permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/testing/golden_test_framework.go",
+			"code": "513: \t// ファイル書き込み\n514: \tif err := ioutil.WriteFile(goldenPath, content, 0644); err != nil {\n515: \t\tgts.t.Fatalf(\"ゴールデンファイル書き込みエラー %s: %v\", goldenPath, err)\n",
+			"line": "514",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G306",
+			"details": "Expect WriteFile permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/storage.go",
+			"code": "367: \n368: \tif err := os.WriteFile(exportPath, data, 0644); err != nil {\n369: \t\treturn fmt.Errorf(\"failed to write export file: %w\", err)\n",
+			"line": "368",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G306",
+			"details": "Expect WriteFile permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/storage.go",
+			"code": "93: \tdefaultFile := fs.getDefaultFilename()\n94: \treturn os.WriteFile(defaultFile, []byte(id), 0644)\n95: }\n",
+			"line": "94",
+			"column": "9",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G306",
+			"details": "Expect WriteFile permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/file.go",
+			"code": "72: \ttestFile := filepath.Join(dir, \".usacloud-update-test\")\n73: \tif err := os.WriteFile(testFile, []byte(\"test\"), 0644); err != nil {\n74: \t\treturn fmt.Errorf(\"directory is not writable: %w\", err)\n",
+			"line": "73",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G306",
+			"details": "Expect WriteFile permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/extended_steps.go",
+			"code": "410: \tfilepath := filepath.Join(s.testDir, \"sensitive_script.sh\")\n411: \tif err := os.WriteFile(filepath, []byte(content), 0644); err != nil {\n412: \t\treturn fmt.Errorf(\"failed to create sensitive script: %w\", err)\n",
+			"line": "411",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G306",
+			"details": "Expect WriteFile permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/extended_steps.go",
+			"code": "251: \t\tcontent := s.generateTestScript(i)\n252: \t\tif err := os.WriteFile(filepath, []byte(content), 0644); err != nil {\n253: \t\t\treturn fmt.Errorf(\"failed to create test file %s: %w\", filename, err)\n",
+			"line": "252",
+			"column": "13",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "276",
+				"url": "https://cwe.mitre.org/data/definitions/276.html"
+			},
+			"rule_id": "G306",
+			"details": "Expect WriteFile permissions to be 0600 or less",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/error_scenarios.go",
+			"code": "259: `\n260: \t\t\t\tif err := os.WriteFile(configFile, []byte(invalidConfig), 0644); err != nil {\n261: \t\t\t\t\treturn err\n",
+			"line": "260",
+			"column": "15",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/integration/integration_test_framework.go",
+			"code": "263: \t\t\tif cmd.Process != nil {\n264: \t\t\t\tcmd.Process.Kill()\n265: \t\t\t}\n",
+			"line": "264",
+			"column": "5",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/e2e/e2e_test_framework.go",
+			"code": "380: \t// テストディレクトリ配下のファイルをスキャン\n381: \tfilepath.Walk(e2e.testDir, func(path string, info os.FileInfo, err error) error {\n382: \t\tif err != nil {\n383: \t\t\treturn nil // エラーは無視\n384: \t\t}\n385: \n386: \t\trelPath, _ := filepath.Rel(e2e.testDir, path)\n387: \t\tsnapshot.Files[relPath] = FileInfo{\n388: \t\t\tSize:    info.Size(),\n389: \t\t\tModTime: info.ModTime(),\n390: \t\t\tIsDir:   info.IsDir(),\n391: \t\t}\n392: \n393: \t\treturn nil\n394: \t})\n395: \n",
+			"line": "381-394",
+			"column": "2",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/e2e/e2e_test_framework.go",
+			"code": "316: \tgo func() {\n317: \t\tio.Copy(stdout, stdoutPipe)\n318: \t}()\n",
+			"line": "317",
+			"column": "3",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/tests/e2e/e2e_test_framework.go",
+			"code": "263: \t\t// タイムアウト\n264: \t\tcmd.Process.Kill()\n265: \t\tcmdError = fmt.Errorf(\"タイムアウト: %v\", timeout)\n",
+			"line": "264",
+			"column": "3",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/testing/golden_test_framework.go",
+			"code": "561: \tjson.Unmarshal(expected, \u0026expectedResult)\n562: \tjson.Unmarshal(actual, \u0026actualResult)\n563: \n",
+			"line": "562",
+			"column": "2",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/testing/golden_test_framework.go",
+			"code": "560: \n561: \tjson.Unmarshal(expected, \u0026expectedResult)\n562: \tjson.Unmarshal(actual, \u0026actualResult)\n",
+			"line": "561",
+			"column": "2",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/sandbox/persistence.go",
+			"code": "104: \tif err := store.initSchema(); err != nil {\n105: \t\tdb.Close()\n106: \t\treturn nil, fmt.Errorf(\"failed to initialize schema: %w\", err)\n",
+			"line": "105",
+			"column": "3",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/storage.go",
+			"code": "150: \t\tif !success {\n151: \t\t\tos.Remove(tempName) // Clean up on failure\n152: \t\t}\n",
+			"line": "151",
+			"column": "4",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/storage.go",
+			"code": "148: \tdefer func() {\n149: \t\tfile.Close()\n150: \t\tif !success {\n",
+			"line": "149",
+			"column": "3",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/manager.go",
+			"code": "581: \tbytes := make([]byte, 16)\n582: \trand.Read(bytes)\n583: \treturn fmt.Sprintf(\"%x\", bytes)\n",
+			"line": "582",
+			"column": "2",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/manager.go",
+			"code": "249: \t\t\t\tpm.storage.SetDefault(p.ID)\n250: \t\t\t\tpm.storage.Save(p)\n251: \t\t\t\tbreak\n",
+			"line": "250",
+			"column": "5",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/manager.go",
+			"code": "248: \t\t\t\tp.IsDefault = true\n249: \t\t\t\tpm.storage.SetDefault(p.ID)\n250: \t\t\t\tpm.storage.Save(p)\n",
+			"line": "249",
+			"column": "5",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/manager.go",
+			"code": "205: \t\tpm.activeProfile.LastUsedAt = time.Now()\n206: \t\tpm.storage.Save(pm.activeProfile)\n207: \t}\n",
+			"line": "206",
+			"column": "3",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/manager.go",
+			"code": "170: \t\tprofile.IsDefault = true\n171: \t\tpm.storage.SetDefault(profile.ID)\n172: \t}\n",
+			"line": "171",
+			"column": "3",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/manager.go",
+			"code": "166: \t\t\t\tp.IsDefault = false\n167: \t\t\t\tpm.storage.Save(p)\n168: \t\t\t}\n",
+			"line": "167",
+			"column": "5",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/manager.go",
+			"code": "95: \tif profile.IsDefault {\n96: \t\tpm.storage.SetDefault(profile.ID)\n97: \t}\n",
+			"line": "96",
+			"column": "3",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/profile/manager.go",
+			"code": "82: \t\t\t\tp.IsDefault = false\n83: \t\t\t\tpm.storage.Save(p)\n84: \t\t\t}\n",
+			"line": "83",
+			"column": "5",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/file.go",
+			"code": "77: \t// Clean up test file\n78: \tos.Remove(testFile)\n79: \n",
+			"line": "78",
+			"column": "2",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/config/env.go",
+			"code": "218: \t\tif os.Getenv(key) == \"\" {\n219: \t\t\tos.Setenv(key, value)\n220: \t\t}\n",
+			"line": "219",
+			"column": "4",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/steps.go",
+			"code": "119: \tt.config.Zone = zone\n120: \tos.Setenv(\"SAKURACLOUD_ZONE\", zone)\n121: \treturn nil\n",
+			"line": "120",
+			"column": "2",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/steps.go",
+			"code": "113: \tt.config.APIEndpoint = endpoint\n114: \tos.Setenv(\"SAKURACLOUD_API_URL\", endpoint)\n115: \treturn nil\n",
+			"line": "114",
+			"column": "2",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/steps.go",
+			"code": "105: \tos.Setenv(\"SAKURACLOUD_ACCESS_TOKEN\", \"test-token\")\n106: \tos.Setenv(\"SAKURACLOUD_ACCESS_TOKEN_SECRET\", \"test-secret\")\n107: \tt.config.AccessToken = \"test-token\"\n",
+			"line": "106",
+			"column": "2",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/steps.go",
+			"code": "104: \t// Set mock authentication for testing\n105: \tos.Setenv(\"SAKURACLOUD_ACCESS_TOKEN\", \"test-token\")\n106: \tos.Setenv(\"SAKURACLOUD_ACCESS_TOKEN_SECRET\", \"test-secret\")\n",
+			"line": "105",
+			"column": "2",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/extended_steps.go",
+			"code": "504: \tos.Setenv(\"SAKURACLOUD_ACCESS_TOKEN_SECRET\", profile.Secret)\n505: \tos.Setenv(\"SAKURACLOUD_ZONE\", profile.Zone)\n506: \n",
+			"line": "505",
+			"column": "2",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/extended_steps.go",
+			"code": "503: \tos.Setenv(\"SAKURACLOUD_ACCESS_TOKEN\", profile.APIKey)\n504: \tos.Setenv(\"SAKURACLOUD_ACCESS_TOKEN_SECRET\", profile.Secret)\n505: \tos.Setenv(\"SAKURACLOUD_ZONE\", profile.Zone)\n",
+			"line": "504",
+			"column": "2",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/extended_steps.go",
+			"code": "502: \t// Set environment variables for the profile\n503: \tos.Setenv(\"SAKURACLOUD_ACCESS_TOKEN\", profile.APIKey)\n504: \tos.Setenv(\"SAKURACLOUD_ACCESS_TOKEN_SECRET\", profile.Secret)\n",
+			"line": "503",
+			"column": "2",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/extended_steps.go",
+			"code": "420: \t// Enable security features\n421: \tos.Setenv(\"USACLOUD_UPDATE_SECURE_MODE\", \"true\")\n422: \tdefer os.Unsetenv(\"USACLOUD_UPDATE_SECURE_MODE\")\n",
+			"line": "421",
+			"column": "2",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/error_scenarios.go",
+			"code": "297: \t\t\t\tif configDir != \"\" {\n298: \t\t\t\t\tos.RemoveAll(configDir)\n299: \t\t\t\t\tos.Unsetenv(\"BDD_TEST_CONFIG_DIR\")\n",
+			"line": "298",
+			"column": "6",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/error_scenarios.go",
+			"code": "176: \t\t\t\t\tos.Chmod(filename, 0644)\n177: \t\t\t\t\tos.Remove(filename)\n178: \t\t\t\t\tos.Unsetenv(\"BDD_TEST_FILE\")\n",
+			"line": "177",
+			"column": "6",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/error_scenarios.go",
+			"code": "175: \t\t\t\t\t// Restore permissions and delete file\n176: \t\t\t\t\tos.Chmod(filename, 0644)\n177: \t\t\t\t\tos.Remove(filename)\n",
+			"line": "176",
+			"column": "6",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/error_scenarios.go",
+			"code": "144: \t\t\t\tfile.WriteString(\"#!/bin/bash\\nusacloud server list\\n\")\n145: \t\t\t\tfile.Close()\n146: \n",
+			"line": "145",
+			"column": "5",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/error_scenarios.go",
+			"code": "143: \t\t\t\t}\n144: \t\t\t\tfile.WriteString(\"#!/bin/bash\\nusacloud server list\\n\")\n145: \t\t\t\tfile.Close()\n",
+			"line": "144",
+			"column": "5",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/Users/yaar/Playground/usacloud-update/internal/bdd/error_scenarios.go",
+			"code": "106: \t\t\t\tfor i := 0; i \u003c 5; i++ {\n107: \t\t\t\t\texecuteCommand(\"usacloud zone ls\")\n108: \t\t\t\t\ttime.Sleep(100 * time.Millisecond)\n",
+			"line": "107",
+			"column": "6",
+			"nosec": false,
+			"suppressions": null
+		}
+	],
+	"Stats": {
+		"files": 68,
+		"lines": 26645,
+		"nosec": 0,
+		"found": 117
+	},
+	"GosecVersion": "dev"
+}

@@ -1,0 +1,12 @@
+{
+  "peak_usage": 464424,
+  "total_allocated": 1334176,
+  "gc_cycles": 12,
+  "allocation_pattern": {},
+  "leak_detection": {
+    "suspected_leaks": null,
+    "unreleased_objects": 0,
+    "memory_growth": 0,
+    "confidence": 0
+  }
+}

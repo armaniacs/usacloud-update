@@ -1,19 +1,25 @@
 # Makefile for usacloud-update
 # Usage:
 #   make build         # ビルド
-#   make test          # 通常テスト（golden比較）
+#   make test          # 通常テスト（golden比較、30秒タイムアウト）
+#   make test-long     # 長時間テスト（30分タイムアウト）
+#   make bdd           # BDDテスト（サンドボックス機能、30秒タイムアウト）
 #   make golden        # 期待値(golden)を最新出力で上書き更新
 #   make verify-sample # サンプルを実行して期待値とdiff確認
 #   make install       # $GOPATH/bin にインストール
 #   make uninstall     # $GOPATH/bin から削除
 #   make tidy fmt vet  # 開発補助
 #   make clean         # 生成物掃除
+#   TEST_TIMEOUT=600s make test # カスタムタイムアウト設定例
 
 GO       ?= go
 BINARY   := usacloud-update
 BIN_DIR  := bin
 CMD_PKG  := ./cmd/$(BINARY)
 PKGS     := ./...
+
+# テストタイムアウト設定（環境変数で上書き可能）
+TEST_TIMEOUT ?= 30s
 
 IN_SAMPLE  := testdata/sample_v0_v1_mixed.sh
 OUT_SAMPLE := /tmp/out.sh
@@ -23,7 +29,7 @@ IN_MIXED   := testdata/mixed_with_non_usacloud.sh
 OUT_MIXED  := /tmp/out_mixed.sh
 GOLDEN_MIXED := testdata/expected_mixed_non_usacloud.sh
 
-.PHONY: all build run test golden verify-sample verify-mixed install uninstall tidy fmt vet clean
+.PHONY: all build run test test-long bdd golden verify-sample verify-mixed install uninstall tidy fmt vet clean
 
 all: build
 
@@ -34,11 +40,19 @@ run: build
 	$(BIN_DIR)/$(BINARY) --in $(IN_SAMPLE) --out $(OUT_SAMPLE)
 
 test:
-	$(GO) test $(PKGS)
+	$(GO) test -timeout $(TEST_TIMEOUT) $(PKGS)
+
+# 長時間テスト用（30分タイムアウト）
+test-long:
+	$(GO) test -timeout 1800s $(PKGS)
+
+# BDD機能テスト（サンドボックス機能のBDD）
+bdd:
+	$(GO) test -timeout $(TEST_TIMEOUT) ./internal/bdd -godog.format=pretty -godog.paths=features
 
 # Goldenファイル(期待値)を「仕様変更後の正しい出力」で更新
 golden:
-	$(GO) test -run Golden -update $(PKGS)
+	$(GO) test -timeout $(TEST_TIMEOUT) -run Golden -update $(PKGS)
 
 # サンプル入力を変換して期待値と比較（手元確認）
 verify-sample: run

@@ -1,0 +1,334 @@
+{
+  "transform_output": "#!/bin/bash\n# 廃止コマンドテスト用サンプル\n# 全ての廃止コマンドパターンを含むスクリプト\n\n# === v1.0で廃止されたコマンド ===\n\n# iso-image → cdrom\nusacloud cdrom list  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nusacloud cdrom read 123456789  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nusacloud cdrom create --name \"test-iso\"  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nusacloud cdrom update 123456789 --name \"updated-iso\"  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nusacloud cdrom delete 123456789  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\n\n# startup-script → note  \nusacloud startup-script list\nusacloud startup-script read 123456789\nusacloud startup-script create --name \"startup.sh\" --content \"#!/bin/bash\\necho hello\"\nusacloud startup-script update 123456789 --name \"updated.sh\"\nusacloud startup-script delete 123456789\n\n# ipv4 → ipaddress\nusacloud ipv4 list\nusacloud ipv4 read 123456789\nusacloud ipv4 create --prefix 28\nusacloud ipv4 update 123456789 --hostname \"test.example.com\"\nusacloud ipv4 delete 123456789\n\n# === プロダクトエイリアスの廃止 ===\n\n# product-disk → disk-plan\nusacloud product-disk list\nusacloud product-disk read disk-ssd-100gb\n\n# product-server → server-plan  \nusacloud product-server list\nusacloud product-server read is1a-cpu1-1gb\n\n# product-database → database-plan\nusacloud product-database list\nusacloud product-database read postgresql-s\n\n# product-ipv4 → ipaddress-plan (存在しない場合)\nusacloud product-ipv4 list\n\n# === 完全に廃止されたコマンド ===\n\n# summary コマンド（v1.1で廃止）\nusacloud summary\nusacloud summary --zone is1a\nusacloud summary --output-type json\n\n# object-storage コマンド（v1.1で廃止）\nusacloud object-storage list\nusacloud object-storage read bucket-name\nusacloud object-storage create --name \"test-bucket\"\nusacloud object-storage delete bucket-name\n\n# === 廃止コマンドと非推奨オプションの組み合わせ ===\n\n# 廃止コマンド + csv出力（二重の問題）\nusacloud cdrom list --output-type json  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nusacloud startup-script list --output-type tsv\nusacloud ipv4 list --output-type json  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/\n\n# 廃止コマンド + ゾーン指定問題\nusacloud cdrom list --zone = all  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nusacloud startup-script list --zone = is1a\n\n# === 部分的に廃止されたサブコマンド ===\n\n# 一部のサブコマンドが廃止された場合の例\nusacloud server deprecated-action 123456789\nusacloud disk old-subcommand 123456789\nusacloud database legacy-operation 123456789\n\n# === 廃止されたオプション ===\n\n# 古いセレクタ形式（仮想的）\nusacloud server list --selector \"Name=web\"\nusacloud disk list --selector \"Zone=is1a\"\n\n# 古いフィルタ形式（仮想的）\nusacloud server list --filter name=web\nusacloud database list --filter type=postgresql\n\n# === 移行対象となる複雑なケース ===\n\n# 複数の廃止要素を含む\nusacloud cdrom list --output-type json --zone = all  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nusacloud startup-script read 123 --selector \"Tags=production\" --output-type tsv\n\n# パイプラインでの使用\nusacloud cdrom list | grep \"ubuntu\"  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nusacloud product-disk list | head -10\necho \"backup\" | usacloud startup-script create --name \"backup.sh\" --content -\n\n# 環境変数との組み合わせ\nZONE=is1a usacloud cdrom list  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nOUTPUT_TYPE=csv usacloud startup-script list\n\n# 条件分岐での使用\nif usacloud cdrom read 123456789 \u003e/dev/null 2\u003e\u00261; then  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\n    echo \"ISO exists\"\nfi\n\n# ループでの使用\nfor iso in $(usacloud cdrom list --output-type json | tail -n +2 | cut -d, -f1); do  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\n    usacloud cdrom read $iso  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\ndone",
+  "transform_stats": {
+    "total_lines": 109,
+    "processed_lines": 107,
+    "transformed_lines": 17,
+    "skipped_lines": 2,
+    "rules_applied": [
+      "resource_rename_iso_image",
+      "resource_rename_iso_image",
+      "resource_rename_iso_image",
+      "resource_rename_iso_image",
+      "resource_rename_iso_image",
+      "output_format_csv_to_json",
+      "resource_rename_iso_image",
+      "output_format_csv_to_json",
+      "resource_rename_iso_image",
+      "output_format_csv_to_json",
+      "resource_rename_iso_image",
+      "resource_rename_iso_image",
+      "resource_rename_iso_image",
+      "resource_rename_iso_image",
+      "output_format_csv_to_json",
+      "resource_rename_iso_image",
+      "resource_rename_iso_image"
+    ]
+  },
+  "validation_results": [
+    {
+      "line_number": 8,
+      "original_line": "usacloud iso-image list",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 9,
+      "original_line": "usacloud iso-image read 123456789",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 10,
+      "original_line": "usacloud iso-image create --name \"test-iso\"",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 11,
+      "original_line": "usacloud iso-image update 123456789 --name \"updated-iso\"",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 12,
+      "original_line": "usacloud iso-image delete 123456789",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 61,
+      "original_line": "usacloud iso-image list --output-type csv",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        },
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 63,
+      "original_line": "usacloud ipv4 list --output-type csv",
+      "validation_status": "warning",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        }
+      ]
+    },
+    {
+      "line_number": 66,
+      "original_line": "usacloud iso-image list --zone = all",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 89,
+      "original_line": "usacloud iso-image list --output-type csv --zone = all",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        },
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 93,
+      "original_line": "usacloud iso-image list | grep \"ubuntu\"",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 98,
+      "original_line": "ZONE=is1a usacloud iso-image list",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 102,
+      "original_line": "if usacloud iso-image read 123456789 \u003e/dev/null 2\u003e\u00261; then",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 107,
+      "original_line": "for iso in $(usacloud iso-image list --output-type csv | tail -n +2 | cut -d, -f1); do",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        },
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 108,
+      "original_line": "    usacloud iso-image read $iso",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    }
+  ],
+  "validation_summary": {
+    "total_issues": 17,
+    "errors": 13,
+    "warnings": 4,
+    "suggestions": 4,
+    "deprecated_commands": 13
+  },
+  "error_messages": [
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso-image' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    },
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso-image' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    },
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso-image' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    },
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso-image' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    },
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso-image' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    },
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso-image' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    },
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso-image' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    },
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso-image' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    },
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso-image' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    },
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'usacloud' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    },
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'usacloud' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    },
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    },
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: '' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    }
+  ],
+  "warning_messages": null,
+  "suggestions": [
+    {
+      "line_number": 61,
+      "original_command": "usacloud iso-image list --output-type csv",
+      "suggested_command": "usacloud iso-image list --output-type json",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    },
+    {
+      "line_number": 63,
+      "original_command": "usacloud ipv4 list --output-type csv",
+      "suggested_command": "usacloud ipv4 list --output-type json",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    },
+    {
+      "line_number": 89,
+      "original_command": "usacloud iso-image list --output-type csv --zone = all",
+      "suggested_command": "usacloud iso-image list --output-type json --zone = all",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    },
+    {
+      "line_number": 107,
+      "original_command": "for iso in $(usacloud iso-image list --output-type csv | tail -n +2 | cut -d, -f1); do",
+      "suggested_command": "for iso in $(usacloud iso-image list --output-type json | tail -n +2 | cut -d, -f1); do",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    }
+  ],
+  "deprecation_warnings": null,
+  "help_output": "🔍 検出された問題と解決方法:\n\n行 8: usacloud iso-image list\n  • iso-imageコマンドは廃止されました。cdromコマンドを使用してください。\n\n行 9: usacloud iso-image read 123456789\n  • iso-imageコマンドは廃止されました。cdromコマンドを使用してください。\n\n行 10: usacloud iso-image create --name \"test-iso\"\n  • iso-imageコマンドは廃止されました。cdromコマンドを使用してください。\n\n行 11: usacloud iso-image update 123456789 --name \"updated-iso\"\n  • iso-imageコマンドは廃止されました。cdromコマンドを使用してください。\n\n行 12: usacloud iso-image delete 123456789\n  • iso-imageコマンドは廃止されました。cdromコマンドを使用してください。\n\n行 61: usacloud iso-image list --output-type csv\n  • csv出力形式は非推奨です。json形式の使用を推奨します。\n    推奨: --output-type json\n  • iso-imageコマンドは廃止されました。cdromコマンドを使用してください。\n\n行 63: usacloud ipv4 list --output-type csv\n  • csv出力形式は非推奨です。json形式の使用を推奨します。\n    推奨: --output-type json\n\n行 66: usacloud iso-image list --zone = all\n  • iso-imageコマンドは廃止されました。cdromコマンドを使用してください。\n\n行 89: usacloud iso-image list --output-type csv --zone = all\n  • csv出力形式は非推奨です。json形式の使用を推奨します。\n    推奨: --output-type json\n  • iso-imageコマンドは廃止されました。cdromコマンドを使用してください。\n\n行 93: usacloud iso-image list | grep \"ubuntu\"\n  • iso-imageコマンドは廃止されました。cdromコマンドを使用してください。\n\n行 98: ZONE=is1a usacloud iso-image list\n  • iso-imageコマンドは廃止されました。cdromコマンドを使用してください。\n\n行 102: if usacloud iso-image read 123456789 \u003e/dev/null 2\u003e\u00261; then\n  • iso-imageコマンドは廃止されました。cdromコマンドを使用してください。\n\n行 107: for iso in $(usacloud iso-image list --output-type csv | tail -n +2 | cut -d, -f1); do\n  • csv出力形式は非推奨です。json形式の使用を推奨します。\n    推奨: --output-type json\n  • iso-imageコマンドは廃止されました。cdromコマンドを使用してください。\n\n行 108:     usacloud iso-image read $iso\n  • iso-imageコマンドは廃止されました。cdromコマンドを使用してください。\n\n",
+  "interactive_output": "",
+  "test_metadata": {
+    "test_name": "DeprecatedCommands",
+    "input_file": "deprecated_commands.sh",
+    "config_used": "default.conf",
+    "test_date": "2025-09-12T13:14:48Z",
+    "tool_version": "1.9.0",
+    "language": "ja",
+    "color_enabled": false
+  }
+}

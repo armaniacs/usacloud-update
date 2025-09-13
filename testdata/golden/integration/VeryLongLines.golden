@@ -1,0 +1,97 @@
+{
+  "transform_output": "#!/bin/bash\n# Very long lines test file - for testing buffer limits and line processing\n\necho \"Testing very long lines with usacloud commands\"\n\n# Extremely long command with many parameters and transformations\nusacloud server list --output-type json --selector \"Tags.Environment=production AND Tags.Role=web-server AND Tags.Region=tokyo AND Tags.Team=engineering AND Tags.Project=ecommerce AND Tags.Owner=john.doe@example.com AND Status=running AND CPU\u003e=2 AND Memory\u003e=4096 AND Disk\u003e=100\" --zone = all --format table --include-deleted false --include-stopped false --sort-by name --sort-order asc --limit 1000 --offset 0  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/\n\n# Another very long line with deprecated commands\nusacloud cdrom list --output-type tsv --selector \"Name~production-* OR Name~staging-* OR Name~development-* OR Name~testing-* OR Name~backup-*\" --zone = tk1a --created-after 2024-01-01 --created-before 2024-12-31 --size-min 1000 --size-max 50000 --include-public true --include-private true --sort-by created --sort-order desc  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\n\n# Product command with extensive selector\nusacloud product-server list --output-type json --selector \"CPU\u003e=1 AND CPU\u003c=32 AND Memory\u003e=1024 AND Memory\u003c=65536 AND Disk\u003e=20 AND Disk\u003c=2000 AND Name~standard* OR Name~premium* OR Name~optimized*\" --zone = all --include-discontinued false --category compute --subcategory virtual-machine\n\n# Very long startup script command  \nusacloud startup-script create --name \"very-long-deployment-script-for-production-environment-with-comprehensive-configuration-and-monitoring-setup\" --content \"$(cat /very/long/path/to/deployment/script/with/many/directories/production-deploy-$(date +%Y%m%d-%H%M%S).sh)\" --selector \"Zone=tk1a AND Environment=production\"\n\n# Chain of commands in one line\nusacloud server list --output-type json | grep production | cut -d',' -f1,2,3 | while read server; do usacloud disk list --output-type json --selector \"ServerId=$server\" | jq '.[] | select(.size \u003e 100)' \u003e\u003e /tmp/large-disks.json; done  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/\n\necho \"Very long lines test completed\"",
+  "transform_stats": {
+    "total_lines": 21,
+    "processed_lines": 19,
+    "transformed_lines": 3,
+    "skipped_lines": 2,
+    "rules_applied": [
+      "output_format_csv_to_json",
+      "resource_rename_iso_image",
+      "output_format_csv_to_json"
+    ]
+  },
+  "validation_results": [
+    {
+      "line_number": 7,
+      "original_line": "usacloud server list --output-type csv --selector \"Tags.Environment=production AND Tags.Role=web-server AND Tags.Region=tokyo AND Tags.Team=engineering AND Tags.Project=ecommerce AND Tags.Owner=john.doe@example.com AND Status=running AND CPU\u003e=2 AND Memory\u003e=4096 AND Disk\u003e=100\" --zone = all --format table --include-deleted false --include-stopped false --sort-by name --sort-order asc --limit 1000 --offset 0",
+      "validation_status": "warning",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        }
+      ]
+    },
+    {
+      "line_number": 10,
+      "original_line": "usacloud iso-image list --output-type tsv --selector \"Name~production-* OR Name~staging-* OR Name~development-* OR Name~testing-* OR Name~backup-*\" --zone = tk1a --created-after 2024-01-01 --created-before 2024-12-31 --size-min 1000 --size-max 50000 --include-public true --include-private true --sort-by created --sort-order desc",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 19,
+      "original_line": "usacloud server list --output-type csv | grep production | cut -d',' -f1,2,3 | while read server; do usacloud disk list --output-type json --selector \"ServerId=$server\" | jq '.[] | select(.size \u003e 100)' \u003e\u003e /tmp/large-disks.json; done",
+      "validation_status": "warning",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        }
+      ]
+    }
+  ],
+  "validation_summary": {
+    "total_issues": 3,
+    "errors": 1,
+    "warnings": 2,
+    "suggestions": 2,
+    "deprecated_commands": 1
+  },
+  "error_messages": [
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso-image' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    }
+  ],
+  "warning_messages": null,
+  "suggestions": [
+    {
+      "line_number": 7,
+      "original_command": "usacloud server list --output-type csv --selector \"Tags.Environment=production AND Tags.Role=web-server AND Tags.Region=tokyo AND Tags.Team=engineering AND Tags.Project=ecommerce AND Tags.Owner=john.doe@example.com AND Status=running AND CPU\u003e=2 AND Memory\u003e=4096 AND Disk\u003e=100\" --zone = all --format table --include-deleted false --include-stopped false --sort-by name --sort-order asc --limit 1000 --offset 0",
+      "suggested_command": "usacloud server list --output-type json --selector \"Tags.Environment=production AND Tags.Role=web-server AND Tags.Region=tokyo AND Tags.Team=engineering AND Tags.Project=ecommerce AND Tags.Owner=john.doe@example.com AND Status=running AND CPU\u003e=2 AND Memory\u003e=4096 AND Disk\u003e=100\" --zone = all --format table --include-deleted false --include-stopped false --sort-by name --sort-order asc --limit 1000 --offset 0",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    },
+    {
+      "line_number": 19,
+      "original_command": "usacloud server list --output-type csv | grep production | cut -d',' -f1,2,3 | while read server; do usacloud disk list --output-type json --selector \"ServerId=$server\" | jq '.[] | select(.size \u003e 100)' \u003e\u003e /tmp/large-disks.json; done",
+      "suggested_command": "usacloud server list --output-type json | grep production | cut -d',' -f1,2,3 | while read server; do usacloud disk list --output-type json --selector \"ServerId=$server\" | jq '.[] | select(.size \u003e 100)' \u003e\u003e /tmp/large-disks.json; done",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    }
+  ],
+  "deprecation_warnings": null,
+  "help_output": "",
+  "interactive_output": "",
+  "test_metadata": {
+    "test_name": "VeryLongLines",
+    "input_file": "very_long_lines.sh",
+    "config_used": "default.conf",
+    "test_date": "2025-09-12T21:32:02Z",
+    "tool_version": "1.9.0",
+    "language": "ja",
+    "color_enabled": false
+  }
+}

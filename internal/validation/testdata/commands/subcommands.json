@@ -1,0 +1,39 @@
+{
+  "server": [
+    "list", "read", "create", "update", "delete", 
+    "boot", "shutdown", "reset", "send-nmi",
+    "monitor-cpu", "ssh", "vnc", "rdp",
+    "wait-until-ready", "wait-until-shutdown"
+  ],
+  "disk": [
+    "list", "read", "create", "update", "delete",
+    "connect", "disconnect"
+  ],
+  "database": [
+    "list", "read", "create", "update", "delete",
+    "logs", "monitor-cpu", "monitor-disk",
+    "wait-until-ready"
+  ],
+  "loadbalancer": [
+    "list", "read", "create", "update", "delete",
+    "monitor", "wait-until-ready"
+  ],
+  "config": [
+    "list", "show", "use", "create", "edit", "delete"
+  ],
+  "dns": [
+    "list", "read", "create", "update", "delete"
+  ],
+  "gslb": [
+    "list", "read", "create", "update", "delete"
+  ],
+  "cdrom": [
+    "list", "read", "create", "update", "delete"
+  ],
+  "note": [
+    "list", "read", "create", "update", "delete"
+  ],
+  "sshkey": [
+    "list", "read", "create", "update", "delete"
+  ]
+}

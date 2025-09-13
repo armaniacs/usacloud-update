@@ -1,0 +1,55 @@
+[
+  {
+    "name": "ini_format_compatibility",
+    "description": "Test INI format backward compatibility",
+    "config_type": "ini",
+    "config_data": {
+      "general": {
+        "debug": true
+      }
+    },
+    "expected_valid": true,
+    "expected_errors": null,
+    "migration_required": false,
+    "tags": [
+      "config",
+      "ini"
+    ],
+    "category": "config",
+    "priority": "high"
+  },
+  {
+    "name": "env_format_compatibility",
+    "description": "Test .env format backward compatibility",
+    "config_type": "env",
+    "config_data": {
+      "DEBUG": "true"
+    },
+    "expected_valid": true,
+    "expected_errors": null,
+    "migration_required": false,
+    "tags": [
+      "config",
+      "env"
+    ],
+    "category": "config",
+    "priority": "medium"
+  },
+  {
+    "name": "config_migration_compatibility",
+    "description": "Test config migration backward compatibility",
+    "config_type": "env_to_ini",
+    "config_data": {
+      "OLD_FORMAT": "true"
+    },
+    "expected_valid": true,
+    "expected_errors": null,
+    "migration_required": true,
+    "tags": [
+      "config",
+      "migration"
+    ],
+    "category": "config",
+    "priority": "medium"
+  }
+]

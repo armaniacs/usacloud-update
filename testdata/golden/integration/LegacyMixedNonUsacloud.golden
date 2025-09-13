@@ -1,0 +1,29 @@
+{
+  "transform_output": "#!/usr/bin/env bash\nset -euo pipefail\n\n# 非usacloud行（変更されないべき）\necho \"Hello World\"\nls -la /tmp\nMY_VAR=\"some value\"\npython script.py --output-type=csv\nother-tool --output-type=csv\ncurl https://example.com --zone = all\ndocker run --name test --zone=all image\n\n# 通常のコメント\n# This is just a regular comment\n\n# usacloud行（変更されるべき）\nusacloud server list --output-type=csv\nusacloud disk read --selector name=mydisk\nusacloud cdrom list  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nusacloud startup-script list\nusacloud ipv4 read --zone tk1a --ipaddress 203.0.113.10\nusacloud product-disk list\nusacloud summary\nusacloud object-storage list\nusacloud server list --zone = all\n\n# 混在行のテスト\necho \"Before usacloud command\"\nusacloud server list --output-type=tsv\necho \"After usacloud command\"\n\n# 複雑なケース\nother-tool --output-type=csv \u0026\u0026 echo \"done\"\nusacloud server list --output-type=csv \u0026\u0026 echo \"usacloud done\"",
+  "transform_stats": {
+    "total_lines": 34,
+    "processed_lines": 32,
+    "transformed_lines": 1,
+    "skipped_lines": 2,
+    "rules_applied": [
+      "resource_rename_iso_image"
+    ]
+  },
+  "validation_results": null,
+  "validation_summary": null,
+  "error_messages": null,
+  "warning_messages": null,
+  "suggestions": null,
+  "deprecation_warnings": null,
+  "help_output": "",
+  "interactive_output": "",
+  "test_metadata": {
+    "test_name": "LegacyMixedNonUsacloud",
+    "input_file": "mixed_with_non_usacloud.sh",
+    "config_used": "default.conf",
+    "test_date": "2025-09-12T13:19:49Z",
+    "tool_version": "1.9.0",
+    "language": "ja",
+    "color_enabled": false
+  }
+}

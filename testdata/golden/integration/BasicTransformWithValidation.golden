@@ -1,0 +1,54 @@
+{
+  "transform_output": "#!/usr/bin/env bash\nset -euo pipefail\n\n# v0風: csv/tsv\nusacloud server list --output-type=csv\n\n# v0風: selector\nusacloud disk read --selector name=mydisk\nusacloud server delete --selector tag=to-be-removed\n\n# v0風: リソース名\nusacloud cdrom list  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nusacloud startup-script list\nusacloud ipv4 read --zone tk1a --ipaddress 203.0.113.10\n\n# v0: product-*\nusacloud product-disk list\n\n# 廃止コマンド\nusacloud summary\n\n# 非サポート(object-storage)\nusacloud object-storage list\n\n# v1.0以降: allゾーン\nusacloud server list --zone = all\n",
+  "transform_stats": {
+    "total_lines": 27,
+    "processed_lines": 25,
+    "transformed_lines": 1,
+    "skipped_lines": 2,
+    "rules_applied": [
+      "resource_rename_iso_image"
+    ]
+  },
+  "validation_results": [
+    {
+      "line_number": 12,
+      "original_line": "usacloud iso-image list",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    }
+  ],
+  "validation_summary": {
+    "total_issues": 1,
+    "errors": 1,
+    "warnings": 0,
+    "suggestions": 0,
+    "deprecated_commands": 1
+  },
+  "error_messages": [
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso-image' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    }
+  ],
+  "warning_messages": null,
+  "suggestions": null,
+  "deprecation_warnings": null,
+  "help_output": "",
+  "interactive_output": "",
+  "test_metadata": {
+    "test_name": "BasicTransformWithValidation",
+    "input_file": "sample_v0_v1_mixed.sh",
+    "config_used": "default.conf",
+    "test_date": "2025-09-10T07:47:34Z",
+    "tool_version": "1.9.0",
+    "language": "ja",
+    "color_enabled": false
+  }
+}

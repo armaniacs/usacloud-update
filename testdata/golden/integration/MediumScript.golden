@@ -1,0 +1,63 @@
+{
+  "transform_output": "#!/bin/bash\n# Medium script with 1000 lines for performance testing\n# Generated script to test transformation performance\n\necho \"Starting medium performance test - 1000 lines\"\n\n# Repeat common patterns to create 1000 lines\nfor i in {1..100}; do\n    echo \"# Batch $i\"\n    echo \"usacloud server list --output-type json\"  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/\n    echo \"usacloud disk list --output-type tsv\" \n    echo \"usacloud database list --zone = all\"\n    echo \"usacloud cdrom list\"  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\n    echo \"usacloud startup-script list\"\n    echo \"usacloud product-server list\"\n    echo \"usacloud server list --selector \\\"Name=test-$i\\\"\"\n    echo \"usacloud disk create --name \\\"disk-$i\\\"\"\n    echo \"usacloud database create --name \\\"db-$i\\\"\"\n    echo \"\"\ndone\n\necho \"Medium performance test completed - 1000 lines processed\"",
+  "transform_stats": {
+    "total_lines": 22,
+    "processed_lines": 20,
+    "transformed_lines": 2,
+    "skipped_lines": 2,
+    "rules_applied": [
+      "output_format_csv_to_json",
+      "resource_rename_iso_image"
+    ]
+  },
+  "validation_results": [
+    {
+      "line_number": 10,
+      "original_line": "    echo \"usacloud server list --output-type csv\"",
+      "validation_status": "warning",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        }
+      ]
+    },
+    {
+      "line_number": 13,
+      "original_line": "    echo \"usacloud iso-image list\"",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    }
+  ],
+  "validation_summary": {
+    "total_issues": 2,
+    "errors": 1,
+    "warnings": 1,
+    "suggestions": 1,
+    "deprecated_commands": 1
+  },
+  "error_messages": null,
+  "warning_messages": null,
+  "suggestions": null,
+  "deprecation_warnings": null,
+  "help_output": "",
+  "interactive_output": "",
+  "test_metadata": {
+    "test_name": "MediumScript",
+    "input_file": "medium_1000_lines.sh",
+    "config_used": "performance.conf",
+    "test_date": "2025-09-12T13:17:15Z",
+    "tool_version": "1.9.0",
+    "language": "ja",
+    "color_enabled": false
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "transform_output": "#!/bin/bash\n# Generated scenario 1 - Mixed version commands for testing\n\necho \"Generated scenario test 1\"\n\n# Mix of v0 and v1.0 commands that need transformation\nusacloud server list --output-type json  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/\nusacloud server list --selector \"Name=test\"\nusacloud disk list --output-type tsv\nusacloud database list --zone = all\n\n# Deprecated commands that need warnings\nusacloud cdrom list  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\nusacloud startup-script list\nusacloud ipv4 list\n\n# Product alias transformations\nusacloud product-server list\nusacloud product-disk list\nusacloud product-database list\n\n# Typo-prone commands for suggestion testing\nusacloud serv list\nusacloud lst\nusacloud Server list\n\n# Complex transformations\nusacloud server create --selector \"Zone=tk1a\" --output-type json  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/\nusacloud disk connect --server-selector \"Name=web*\" --zone = all\n\n# Summary and object-storage (discontinued)\nusacloud summary server\nusacloud object-storage list\n\n# Mixed correct and incorrect in same script\nusacloud server list\nusacloud disk lst  \nusacloud database list --output-type json\nusacloud cdrom create --name \"test\"  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\n\necho \"Generated scenario 1 complete\"",
+  "transform_stats": {
+    "total_lines": 41,
+    "processed_lines": 39,
+    "transformed_lines": 4,
+    "skipped_lines": 2,
+    "rules_applied": [
+      "output_format_csv_to_json",
+      "resource_rename_iso_image",
+      "output_format_csv_to_json",
+      "resource_rename_iso_image"
+    ]
+  },
+  "validation_results": [
+    {
+      "line_number": 7,
+      "original_line": "usacloud server list --output-type csv",
+      "validation_status": "warning",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        }
+      ]
+    },
+    {
+      "line_number": 13,
+      "original_line": "usacloud iso-image list",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    },
+    {
+      "line_number": 28,
+      "original_line": "usacloud server create --selector \"Zone=tk1a\" --output-type csv",
+      "validation_status": "warning",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        }
+      ]
+    },
+    {
+      "line_number": 39,
+      "original_line": "usacloud iso-image create --name \"test\"",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    }
+  ],
+  "validation_summary": {
+    "total_issues": 4,
+    "errors": 2,
+    "warnings": 2,
+    "suggestions": 2,
+    "deprecated_commands": 2
+  },
+  "error_messages": [
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso-image' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    },
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'iso-image' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    }
+  ],
+  "warning_messages": null,
+  "suggestions": [
+    {
+      "line_number": 7,
+      "original_command": "usacloud server list --output-type csv",
+      "suggested_command": "usacloud server list --output-type json",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    },
+    {
+      "line_number": 28,
+      "original_command": "usacloud server create --selector \"Zone=tk1a\" --output-type csv",
+      "suggested_command": "usacloud server create --selector \"Zone=tk1a\" --output-type json",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    }
+  ],
+  "deprecation_warnings": null,
+  "help_output": "",
+  "interactive_output": "",
+  "test_metadata": {
+    "test_name": "GeneratedScenario_001",
+    "input_file": "generated_scenario_1.sh",
+    "config_used": "default.conf",
+    "test_date": "2025-09-12T13:21:40Z",
+    "tool_version": "1.9.0",
+    "language": "ja",
+    "color_enabled": false
+  }
+}

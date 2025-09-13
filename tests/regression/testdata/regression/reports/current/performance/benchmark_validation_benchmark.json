@@ -1,0 +1,9 @@
+{
+  "name": "validation_benchmark",
+  "iterations": 2000,
+  "nanos_per_op": 27765,
+  "bytes_per_op": 0,
+  "allocs_per_op": 0,
+  "execution_time": 55925417,
+  "total_memory_alloc": 0
+}

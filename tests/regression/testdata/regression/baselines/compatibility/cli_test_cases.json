@@ -1,0 +1,108 @@
+[
+  {
+    "name": "help_command_compatibility",
+    "description": "Test help command backward compatibility",
+    "arguments": [
+      "--help"
+    ],
+    "environment": null,
+    "expected_exit_code": 0,
+    "expected_output": [
+      "usacloud-update",
+      "使用方法",
+      "オプション"
+    ],
+    "expected_errors": null,
+    "expected_files": null,
+    "version_constraints": null,
+    "tags": [
+      "help",
+      "backward-compatibility"
+    ],
+    "category": "cli",
+    "priority": "high"
+  },
+  {
+    "name": "version_command_compatibility",
+    "description": "Test version command backward compatibility",
+    "arguments": [
+      "--version"
+    ],
+    "environment": null,
+    "expected_exit_code": 0,
+    "expected_output": [
+      "usacloud-update"
+    ],
+    "expected_errors": null,
+    "expected_files": null,
+    "version_constraints": null,
+    "tags": [
+      "version",
+      "backward-compatibility"
+    ],
+    "category": "cli",
+    "priority": "high"
+  },
+  {
+    "name": "legacy_flag_compatibility",
+    "description": "Test legacy flag support",
+    "arguments": [
+      "--validate-only",
+      "/dev/stdin"
+    ],
+    "environment": null,
+    "expected_exit_code": 0,
+    "expected_output": null,
+    "expected_errors": null,
+    "expected_files": null,
+    "version_constraints": null,
+    "tags": [
+      "legacy",
+      "flags"
+    ],
+    "category": "cli",
+    "priority": "medium"
+  },
+  {
+    "name": "output_format_compatibility",
+    "description": "Test output format backward compatibility",
+    "arguments": [
+      "--help"
+    ],
+    "environment": null,
+    "expected_exit_code": 0,
+    "expected_output": [
+      "usacloud-update"
+    ],
+    "expected_errors": null,
+    "expected_files": null,
+    "version_constraints": null,
+    "tags": [
+      "output",
+      "format"
+    ],
+    "category": "cli",
+    "priority": "medium"
+  },
+  {
+    "name": "error_code_compatibility",
+    "description": "Test error code backward compatibility",
+    "arguments": [
+      "--invalid-flag"
+    ],
+    "environment": null,
+    "expected_exit_code": 1,
+    "expected_output": null,
+    "expected_errors": [
+      "無効なオプション"
+    ],
+    "expected_files": null,
+    "version_constraints": null,
+    "tags": [
+      "error",
+      "exit-code"
+    ],
+    "category": "cli",
+    "priority": "medium"
+  }
+]

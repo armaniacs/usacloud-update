@@ -1,0 +1,9 @@
+{
+  "input": "usacloud server list --output-type csv",
+  "output": "usacloud server list --output-type json # usacloud-update: csv→json変換",
+  "stats": null,
+  "errors": [],
+  "warnings": [],
+  "execution_time": 180125,
+  "memory_usage": 128
+}

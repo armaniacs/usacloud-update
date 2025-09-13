@@ -1,0 +1,76 @@
+{
+  "transform_output": "#!/bin/bash\n# This file contains only comments - no actual commands\n\n# This is a comprehensive comment-only test file\n# Used to test edge case handling when no transformations are needed\n\n# Example of what commands might look like:\n# usacloud server list --output-type json  # usacloud-update: csv → json 形式変更 https://docs.usacloud.jp/\n# usacloud disk list --output-type tsv\n\n# But none of these are actual commands, just comments\n\n# Multi-line comment block:\n# usacloud cdrom list  # usacloud-update: iso-image → cdrom 名称変更 https://docs.usacloud.jp/\n# usacloud startup-script create\n# usacloud product-server list\n\n# Even more comments with potential transformations:\n# usacloud database list --zone = all\n# usacloud server list --selector \"Name=test\"\n\n# Final comment\n# End of comment-only file",
+  "transform_stats": {
+    "total_lines": 23,
+    "processed_lines": 21,
+    "transformed_lines": 2,
+    "skipped_lines": 2,
+    "rules_applied": [
+      "output_format_csv_to_json",
+      "resource_rename_iso_image"
+    ]
+  },
+  "validation_results": [
+    {
+      "line_number": 8,
+      "original_line": "# usacloud server list --output-type csv",
+      "validation_status": "warning",
+      "issues": [
+        {
+          "type": "deprecated_parameter",
+          "severity": "warning",
+          "message": "csv出力形式は非推奨です。json形式の使用を推奨します。",
+          "suggestion": "--output-type json"
+        }
+      ]
+    },
+    {
+      "line_number": 14,
+      "original_line": "# usacloud iso-image list",
+      "validation_status": "error",
+      "issues": [
+        {
+          "type": "deprecated_command",
+          "severity": "error",
+          "message": "iso-imageコマンドは廃止されました。cdromコマンドを使用してください。",
+          "replacement_command": "cdrom"
+        }
+      ]
+    }
+  ],
+  "validation_summary": {
+    "total_issues": 2,
+    "errors": 1,
+    "warnings": 1,
+    "suggestions": 1,
+    "deprecated_commands": 1
+  },
+  "error_messages": [
+    {
+      "type": "deprecated_command_error",
+      "formatted_message": "❌ エラー: 'usacloud' コマンドはv1で廃止されました。\n\n🔄 代わりに以下を使用してください:\n   usacloud cdrom list\n\nℹ️  詳細な移行ガイド: https://docs.usacloud.jp/usacloud/upgrade/v1_0_0/"
+    }
+  ],
+  "warning_messages": null,
+  "suggestions": [
+    {
+      "line_number": 8,
+      "original_command": "# usacloud server list --output-type csv",
+      "suggested_command": "# usacloud server list --output-type json",
+      "reason": "JSON形式の方が構造化データの処理に適しています",
+      "confidence": 0.9
+    }
+  ],
+  "deprecation_warnings": null,
+  "help_output": "",
+  "interactive_output": "",
+  "test_metadata": {
+    "test_name": "OnlyComments",
+    "input_file": "only_comments.sh",
+    "config_used": "default.conf",
+    "test_date": "2025-09-12T21:32:02Z",
+    "tool_version": "1.9.0",
+    "language": "ja",
+    "color_enabled": false
+  }
+}
