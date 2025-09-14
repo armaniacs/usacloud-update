@@ -1,9 +1,0 @@
-{
-  "config_type": "env",
-  "config_data": {
-    "DEBUG": "true"
-  },
-  "is_valid": true,
-  "load_time": 41,
-  "validation_errors": []
-}

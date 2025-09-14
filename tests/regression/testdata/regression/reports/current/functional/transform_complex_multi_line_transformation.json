@@ -1,9 +1,0 @@
-{
-  "input": "#!/bin/bash\nusacloud server list --output-type csv\nusacloud iso-image list --output-type tsv\nusacloud server read --selector name=test",
-  "output": "#!/bin/bash\nusacloud server list --output-type json\nusacloud iso-image list --output-type tsv\nusacloud server read --selector name=test # usacloud-update: csv→json変換",
-  "stats": null,
-  "errors": [],
-  "warnings": [],
-  "execution_time": 545708,
-  "memory_usage": 320
-}

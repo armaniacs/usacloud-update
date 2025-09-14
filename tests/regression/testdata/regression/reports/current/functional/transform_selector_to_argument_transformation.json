@@ -1,9 +1,0 @@
-{
-  "input": "usacloud server read --selector name=test",
-  "output": "usacloud server read --selector name=test",
-  "stats": null,
-  "errors": [],
-  "warnings": [],
-  "execution_time": 230458,
-  "memory_usage": 0
-}

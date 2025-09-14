@@ -1,9 +1,0 @@
-{
-  "scenario": "invalid_option",
-  "success": true,
-  "output": "",
-  "error_output": "",
-  "exit_code": 1,
-  "execution_time": 100000000,
-  "memory_usage": 1048576
-}

@@ -1,7 +1,0 @@
-{
-  "function": "config.Load",
-  "parameters": "/path/to/config",
-  "result": {},
-  "error": "",
-  "execution_time": 0
-}

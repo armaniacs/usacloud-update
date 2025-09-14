@@ -1,9 +1,0 @@
-{
-  "name": "single_transformation_benchmark",
-  "iterations": 1000,
-  "nanos_per_op": 9118,
-  "bytes_per_op": 0,
-  "allocs_per_op": 0,
-  "execution_time": 9346291,
-  "total_memory_alloc": 48
-}

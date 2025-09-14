@@ -1,8 +1,0 @@
-{
-  "command": "usacloud-update --version",
-  "exit_code": 0,
-  "stdout": "usacloud-update v1.9.0\n",
-  "stderr": "",
-  "execution_time": 4312541,
-  "environment_vars": null
-}

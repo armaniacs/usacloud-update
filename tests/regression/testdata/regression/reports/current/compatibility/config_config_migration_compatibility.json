@@ -1,9 +1,0 @@
-{
-  "config_type": "env_to_ini",
-  "config_data": {
-    "OLD_FORMAT": "true"
-  },
-  "is_valid": true,
-  "load_time": 0,
-  "validation_errors": []
-}

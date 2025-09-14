@@ -1,9 +1,0 @@
-{
-  "input": "usacloud server list --zone = all",
-  "output": "usacloud server list --zone = all",
-  "stats": null,
-  "errors": [],
-  "warnings": [],
-  "execution_time": 80875,
-  "memory_usage": 0
-}

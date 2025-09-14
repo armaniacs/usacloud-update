@@ -1,7 +1,0 @@
-{
-  "function": "transform.Engine.Process",
-  "parameters": "usacloud server list --output-type csv",
-  "result": "usacloud server list --output-type json",
-  "error": "",
-  "execution_time": 125
-}

@@ -1,9 +1,0 @@
-{
-  "scenario": "version_command",
-  "success": true,
-  "output": "usacloud-update",
-  "error_output": "",
-  "exit_code": 0,
-  "execution_time": 100000000,
-  "memory_usage": 1048576
-}
