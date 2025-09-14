@@ -98,7 +98,7 @@ const (
 
 // ConfigKey constants for common configuration keys
 const (
-	ConfigKeyAccessToken       = "SAKURACLOUD_ACCESS_TOKEN"       // #nosec G101 -- This is a configuration key name, not a credential
+	ConfigKeyAccessToken       = "SAKURACLOUD_ACCESS_TOKEN"        // #nosec G101 -- This is a configuration key name, not a credential
 	ConfigKeyAccessTokenSecret = "SAKURACLOUD_ACCESS_TOKEN_SECRET" // #nosec G101 -- This is a configuration key name, not a credential
 	ConfigKeyZone              = "SAKURACLOUD_ZONE"
 	ConfigKeyDryRun            = "USACLOUD_UPDATE_DRY_RUN"

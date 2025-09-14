@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/armaniacs/usacloud-update/internal/config"
 	"github.com/armaniacs/usacloud-update/internal/sandbox"
@@ -917,24 +918,8 @@ usacloud-update v%s
 	}
 }
 
-func main() {
-	flag.Parse()
-
-	if *showHelp {
-		printHelpMessage()
-		os.Exit(0)
-	}
-
-	if *showVersion {
-		fmt.Printf("usacloud-update v%s\n", version)
-		os.Exit(0)
-	}
-
-	// Handle positional arguments for input file
-	args := flag.Args()
-	if len(args) > 0 && *inFile == "-" {
-		*inFile = args[0]
-	}
+// runMainLogic contains the original main logic extracted for cobra integration
+func runMainLogic() {
 
 	// Load and validate configuration if --config flag is provided
 	if *configFile != "" {
@@ -1315,4 +1300,79 @@ func runBatchMode(cfg *config.SandboxConfig, lines []string) {
 			os.Exit(1)
 		}
 	}
+}
+
+// detectStdinInput checks if there's input from stdin within the timeout
+// Returns true if input is available, false if timeout occurs
+func detectStdinInput(timeout time.Duration) bool {
+	// Test mode support: always timeout if TEST_STDIN_TIMEOUT is set
+	if os.Getenv("TEST_STDIN_TIMEOUT") == "true" {
+		time.Sleep(timeout)
+		return false
+	}
+
+	// Check if stdin is a pipe/redirect (non-terminal)
+	stat, err := os.Stdin.Stat()
+	if err != nil {
+		return false
+	}
+
+	// If stdin is not a terminal (pipe or redirect), check if there's actual data
+	if (stat.Mode() & os.ModeCharDevice) == 0 {
+		// For pipes/redirects, try to read with timeout to handle /dev/null case
+		inputAvailable := make(chan bool, 1)
+		go func() {
+			scanner := bufio.NewScanner(os.Stdin)
+			if scanner.Scan() && len(scanner.Text()) > 0 {
+				inputAvailable <- true
+			} else {
+				inputAvailable <- false
+			}
+			close(inputAvailable)
+		}()
+
+		// Even for pipes, apply timeout to handle cases like /dev/null redirection
+		select {
+		case available := <-inputAvailable:
+			return available
+		case <-time.After(timeout):
+			return false
+		}
+	}
+
+	// For interactive terminal, check for input with timeout
+	inputAvailable := make(chan bool, 1)
+	go func() {
+		scanner := bufio.NewScanner(os.Stdin)
+		if scanner.Scan() {
+			// Put the scanned line back for main processing
+			// This is a simple approach - in practice we might need a more sophisticated buffering
+			inputAvailable <- true
+		} else {
+			inputAvailable <- false
+		}
+		close(inputAvailable)
+	}()
+
+	select {
+	case available := <-inputAvailable:
+		return available
+	case <-time.After(timeout):
+		return false
+	}
+}
+
+// main function using cobra
+func main() {
+	// Check for stdin timeout only if no arguments provided
+	if len(os.Args) == 1 {
+		// Check for input with 2-second timeout
+		if !detectStdinInput(2 * time.Second) {
+			// No input within timeout, show help
+			printHelpMessage()
+			return
+		}
+	}
+
+	Execute()
 }

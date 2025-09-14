@@ -152,7 +152,7 @@ func TestErrorRecovery_NetworkIssues(t *testing.T) {
 			ExpectedExitCode: 0, // ヘルプは正常表示されるべき
 			ExpectedStdout: []string{
 				"usacloud-update",
-				"使用方法",
+				"Usage",
 			},
 		}
 

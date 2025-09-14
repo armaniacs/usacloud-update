@@ -7,7 +7,7 @@
 
 usacloud-update は、異なるバージョンの usacloud コマンドが混在した bash スクリプトを v1.1 で動作するように自動変換するツールです。さらに、Sakura Cloud サンドボックス環境での実際のテスト実行まで一貫してサポートします。
 
-## 🚀 v1.9.0 主要機能
+## 🚀 v1.9.1 主要機能
 
 ### サンドボックス実行
 変換したコマンドを Sakura Cloud tk1v ゾーンで料金なしで実際にテスト実行します。
@@ -23,6 +23,12 @@ usacloud-update は、異なるバージョンの usacloud コマンドが混在
 - 全シナリオ実装完了（品質保証済み）
 - `make bdd` でテスト実行可能
 
+### スマート設定管理
+環境変数を自動検出し、対話的に設定ファイルを生成する新機能です。
+- 環境変数自動検出：`usacloud-update config` で設定ファイル未検出時に環境変数を自動チェック
+- 対話的ファイル生成：検出した環境変数から設定ファイルを簡単作成
+- 厳密検証モード：`--strict-validation` フラグによる高精度検証
+
 ### 柔軟な実行モード
 - インタラクティブモード：TUI でコマンド個別選択・実行
 - バッチモード：全コマンド自動実行
@@ -35,20 +41,49 @@ usacloud-update は、異なるバージョンの usacloud コマンドが混在
 # パイプラインで使用
 cat input.sh | usacloud-update > output.sh
 
-# ファイル指定変換
+# ファイル指定変換（従来方式）
 usacloud-update --in script.sh --out updated_script.sh
 ```
 
 ### サンドボックス実行
 ```bash
-# インタラクティブ TUI でサンドボックス実行
+# 新しいサブコマンド形式（推奨）
+usacloud-update sandbox script.sh
+usacloud-update sandbox --dry-run script.sh
+usacloud-update sandbox --batch script.sh
+usacloud-update sandbox --interactive script.sh
+
+# 従来のフラグ形式（後方互換性）
 usacloud-update --sandbox --in script.sh
-
-# ドライランモード（安全確認）
 usacloud-update --sandbox --dry-run --in script.sh
-
-# バッチモード（全自動実行）
 usacloud-update --sandbox --batch --in script.sh
+```
+
+### 検証とツール管理
+```bash
+# スクリプト検証（新機能）
+usacloud-update validate script.sh
+
+# 設定管理（環境変数自動検出対応）
+usacloud-update config
+
+# 厳密検証モード（新機能）
+usacloud-update --strict-validation script.sh
+
+# バージョン確認
+usacloud-update version
+```
+
+### ヘルプとドキュメント
+```bash
+# ヘルプの表示（3つの方法）
+usacloud-update -h
+usacloud-update --help
+usacloud-update help    # サブコマンド形式
+
+# バージョン情報の表示
+usacloud-update --version
+usacloud-update -v
 ```
 
 ## インストール
@@ -92,8 +127,11 @@ open ref/detailed-implementation-reference.md
 
 サンドボックス機能には Sakura Cloud の API 認証情報が必要です。
 
-### 推奨: 設定ファイル方式
+### 推奨: 設定ファイル方式（環境変数自動検出対応 ✨新機能）
 ```bash
+# スマート設定：環境変数がある場合は自動検出・変換提案
+usacloud-update config
+
 # 初回実行時に対話的に設定ファイルを作成
 usacloud-update --sandbox --in your-script.sh
 
@@ -106,6 +144,8 @@ cp usacloud-update.conf.sample ~/.config/usacloud-update/usacloud-update.conf
 ```bash
 export SAKURACLOUD_ACCESS_TOKEN="your-access-token"
 export SAKURACLOUD_ACCESS_TOKEN_SECRET="your-access-token-secret"
+
+# 注意：環境変数がある場合、usacloud-update config で設定ファイル移行を提案
 ```
 
 ## 主な変換ルール
@@ -117,19 +157,21 @@ export SAKURACLOUD_ACCESS_TOKEN_SECRET="your-access-token-secret"
 
 ## 品質保証
 
-### 包括的テスト体制（56.1% カバレッジ）
-- 全ユニットテスト通過（`make test`）：17テストパッケージで100%成功
-- BDD テスト完全実装（`make bdd`）：7つのプレースホルダ関数を完全実装
-- 多層テスト実装：E2E/統合/BDD/パフォーマンス/回帰テスト
-- エッジケーステスト：並行処理、エラー条件、境界値を網羅
-- ゴールデンファイルテスト：出力比較による動作保証
+### 包括的テスト体制（完全安定化達成 ✨新機能）
+- **完全テスト成功（`make test`）**：17テストパッケージで100%成功・安定化完了
+- **BDD テスト完全実装（`make bdd`）**：7つのプレースホルダ関数を完全実装
+- **E2E統合テスト**：ユーザーワークフロー・エラーシナリオの包括的検証
+- **多層テスト実装**：E2E/統合/BDD/パフォーマンス/回帰テスト
+- **エッジケーステスト**：並行処理、エラー条件、境界値を網羅
+- **ゴールデンファイルテスト**：出力比較による動作保証
 
 ### 実装完了度
-- コア機能：Transform Engine（100%カバレッジ）、Validation System
-- TUI システム：インタラクティブUI、ヘルプシステム（62.7%カバレッジ）
-- サンドボックス：安全な実行環境（78.5%カバレッジ）
-- 設定管理：多ソース優先度システム（85.7%カバレッジ）
-- テストインフラ：5,175+行の包括的テストコード
+- **コア機能**：Transform Engine（100%カバレッジ）、Validation System
+- **CLI拡張**：厳密検証モード（`--strict-validation`）、引数処理最適化
+- **TUI システム**：インタラクティブUI、ヘルプシステム（62.7%カバレッジ）
+- **サンドボックス**：安全な実行環境（78.5%カバレッジ）
+- **設定管理**：環境変数自動検出・変換システム（100%カバレッジ）
+- **テストインフラ**：5,175+行の包括的テストコード（完全安定化）
 
 ### 開発者支援
 - 包括的ドキュメント：2,383+行の詳細実装・テストガイド

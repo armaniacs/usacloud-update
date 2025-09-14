@@ -145,9 +145,9 @@ func TestBeginnerWorkflow_HelpSystem(t *testing.T) {
 			ExpectedExitCode: 0,
 			ExpectedStdout: []string{
 				"usacloud-update",
-				"使用方法",
-				"オプション",
-				"例:",
+				"Usage",
+				"Flags",
+				"使用例:",
 			},
 		}
 
@@ -161,10 +161,10 @@ func TestBeginnerWorkflow_HelpSystem(t *testing.T) {
 			Arguments: []string{
 				"--invalid-option",
 			},
-			ExpectedExitCode: 2, // Goのflagパッケージは無効なフラグでexit code 2を返す
+			ExpectedExitCode: 1, // Cobraは無効なフラグでexit code 1を返す
 			ExpectedStderr: []string{
-				"無効なオプション",
-				"--help",
+				"Error: unknown flag",
+				"Usage",
 			},
 		}
 
@@ -279,12 +279,12 @@ func validateReducedHelp(t *testing.T, result *e2e.E2ETestResult) {
 func validateHelpOutput(t *testing.T, result *e2e.E2ETestResult) {
 	t.Helper()
 
-	// ヘルプ出力の品質を確認
+	// ヘルプ出力の品質を確認（Cobra標準出力に合わせて修正）
 	requiredSections := []string{
-		"概要",
-		"使用方法",
-		"オプション",
-		"例",
+		"usacloud-update は異なるバージョン", // 概要部分
+		"Usage", // 使用方法 → Usage
+		"Flags", // オプション → Flags
+		"使用例",   // 例 → 使用例（実際の出力に合わせる）
 	}
 
 	for _, section := range requiredSections {
@@ -297,10 +297,10 @@ func validateHelpOutput(t *testing.T, result *e2e.E2ETestResult) {
 func validateErrorHelpHints(t *testing.T, result *e2e.E2ETestResult) {
 	t.Helper()
 
-	// エラー時のヘルプヒントが適切に表示されているか確認
+	// エラー時のヘルプヒントが適切に表示されているか確認（Cobra標準に合わせて修正）
 	expectedHints := []string{
-		"--help",
-		"使用方法",
+		"Usage",
+		"Use \"usacloud-update",
 	}
 
 	for _, hint := range expectedHints {
