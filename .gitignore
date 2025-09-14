@@ -36,6 +36,10 @@ go.work.sum
 usacloud-update.conf
 usacloud-update
 
+# Regression test reports
+tests/regression/testdata/regression/reports/
+*regression_report*.json
+
 # Editor/IDE
 # .idea/
 # .vscode/
