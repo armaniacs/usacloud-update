@@ -7,11 +7,11 @@ usacloud-updateツールのユーザビリティ向上のため、テスト期�
 **QAエンジニア/開発者**として、**テスト期待値が実際の出力と一致したヘルプメッセージとエラーハンドリング**がほしい、なぜなら**テストの保守性を高め、ユーザー向けドキュメントとの整合性を保ちたい**から
 
 ## 受け入れ条件
-- [ ] ヘルプメッセージテストがCobra標準出力（Usage/Flags）と一致する
-- [ ] エラーハンドリングテストがCobra標準動作（終了コード1、英語エラーメッセージ）と一致する
-- [ ] beginner_workflow_test.goの全テストが成功する
-- [ ] recovery_scenarios_test.goの全テストが成功する
-- [ ] 既存機能への影響がない（回帰テストパス）
+- [x] ヘルプメッセージテストがCobra標準出力（Usage/Flags）と一致する
+- [x] エラーハンドリングテストがCobra標準動作（終了コード1、英語エラーメッセージ）と一致する
+- [x] beginner_workflow_test.goの全テストが成功する
+- [x] recovery_scenarios_test.goの全テストが成功する
+- [x] 既存機能への影響がない（回帰テストパス）
 
 ## ビジネス価値
 - **開発効率向上**: テストメンテナンス時間を50%削減
@@ -127,12 +127,12 @@ var rootCmd = &cobra.Command{
 - 既存機能への影響測定が簡単
 
 ## 完了の定義
-- [ ] beginner_workflow_test.goの全テストケースが成功
-- [ ] recovery_scenarios_test.goの全テストケースが成功
-- [ ] make test全体の成功率向上（現在の失敗を解消）
-- [ ] PBI-026等既存機能への影響がない
-- [ ] 実装コードは変更不要であることを確認
-- [ ] テスト実行時間の改善（偽陽性調査時間削減）
+- [x] beginner_workflow_test.goの全テストケースが成功
+- [x] recovery_scenarios_test.goの全テストケースが成功
+- [x] make test全体の成功率向上（現在の失敗を解消）
+- [x] PBI-026等既存機能への影響がない
+- [x] 実装コードは変更不要であることを確認
+- [x] テスト実行時間の改善（偽陽性調査時間削減）
 
 ## 実装予定ファイル
 - `tests/e2e/user_workflows/beginner_workflow_test.go` - ヘルプメッセージ期待値修正
