@@ -95,8 +95,8 @@ func TestFileErrors_OutputFileIssues(t *testing.T) {
 			},
 			ExpectedExitCode: 1,
 			ExpectedStderr: []string{
-				"出力",
-				"失敗",
+				"権限エラー",
+				"書き込み権限がありません",
 			},
 		}
 
