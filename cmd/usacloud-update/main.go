@@ -4,11 +4,13 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
-	"io"
 	"os"
 	"strings"
 	"time"
 
+	"github.com/armaniacs/usacloud-update/internal/cli/errors"
+	"github.com/armaniacs/usacloud-update/internal/cli/helpers"
+	cliio "github.com/armaniacs/usacloud-update/internal/cli/io"
 	"github.com/armaniacs/usacloud-update/internal/config"
 	"github.com/armaniacs/usacloud-update/internal/sandbox"
 	"github.com/armaniacs/usacloud-update/internal/transform"
@@ -130,6 +132,8 @@ type IntegratedCLI struct {
 	similarSuggester   *validation.SimilarCommandSuggester
 	errorFormatter     *validation.ComprehensiveErrorFormatter
 	helpSystem         *validation.UserFriendlyHelpSystem
+	cliErrorFormatter  *errors.ErrorFormatter
+	fileReader         *cliio.FileReader
 }
 
 // NewIntegratedCLI は新しい統合CLIを作成
@@ -144,6 +148,7 @@ func NewIntegratedCLI() *IntegratedCLI {
 	similarSuggester := validation.NewSimilarCommandSuggester(valCfg.MaxDistance, valCfg.MaxSuggestions)
 	errorFormatter := validation.NewDefaultComprehensiveErrorFormatter()
 	helpSystem := validation.NewDefaultUserFriendlyHelpSystem()
+	cliErrorFormatter := errors.NewErrorFormatter(*colorEnabled)
 
 	cli := &IntegratedCLI{
 		config:             cfg,
@@ -155,6 +160,8 @@ func NewIntegratedCLI() *IntegratedCLI {
 		similarSuggester:   similarSuggester,
 		errorFormatter:     errorFormatter,
 		helpSystem:         helpSystem,
+		cliErrorFormatter:  cliErrorFormatter,
+		fileReader:         cliio.NewFileReader(),
 	}
 
 	return cli
@@ -204,57 +211,22 @@ func (cli *IntegratedCLI) runIntegratedMode() error {
 
 // readInputFile は入力ファイルを読み込み
 func (cli *IntegratedCLI) readInputFile() ([]string, error) {
-	var r io.Reader = os.Stdin
-	if cli.config.InputPath != "-" {
-		f, err := os.Open(cli.config.InputPath)
-		if err != nil {
-			// Localize error messages based on error type
-			if os.IsNotExist(err) {
-				return nil, fmt.Errorf("ファイルが見つかりません: %s", cli.config.InputPath)
-			}
-			if os.IsPermission(err) {
-				return nil, fmt.Errorf("読み取り権限がありません: %s", cli.config.InputPath)
-			}
-			return nil, fmt.Errorf("入力ファイルを開けません: %w", err)
+	lines, err := cli.fileReader.ReadInputLines(cli.config.InputPath)
+	if err != nil {
+		// Handle different error types with appropriate formatting
+		if os.IsNotExist(err) {
+			return nil, fmt.Errorf("%s", cli.cliErrorFormatter.FormatFileNotFound(cli.config.InputPath))
 		}
-		defer func() {
-			if closeErr := f.Close(); closeErr != nil {
-				// Log close error but don't override main error
-			}
-		}()
-		r = f
-
-		// Check for binary content by reading first few bytes
-		firstBytes := make([]byte, 512)
-		n, _ := f.Read(firstBytes)
-		if n > 0 {
-			// Check if content contains null bytes (binary indicator)
-			for i := 0; i < n; i++ {
-				if firstBytes[i] == 0 {
-					return nil, fmt.Errorf("バイナリファイルは処理できません: %s", cli.config.InputPath)
-				}
-			}
+		if os.IsPermission(err) {
+			return nil, fmt.Errorf("%s", cli.cliErrorFormatter.FormatFilePermission(cli.config.InputPath, "読み取り"))
 		}
-
-		// Reset file position to beginning
-		if _, err := f.Seek(0, 0); err != nil {
-			return nil, fmt.Errorf("ファイル位置のリセットに失敗: %w", err)
+		if cliio.IsBinaryFileError(err) {
+			return nil, fmt.Errorf("%s", cli.cliErrorFormatter.FormatBinaryFile(cli.config.InputPath))
 		}
+		return nil, fmt.Errorf("%s", cli.cliErrorFormatter.FormatFileRead(cli.config.InputPath, err))
 	}
 
-	scanner := bufio.NewScanner(r)
-	scanner.Buffer(make([]byte, 0, 1024*1024), 1024*1024)
-
-	var lines []string
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-
-	if err := scanner.Err(); err != nil {
-		return nil, err
-	}
-
-	// Check for empty file
+	// Check for empty file (but not stdin) - CLI-level validation
 	if cli.config.InputPath != "-" && len(lines) == 0 {
 		return nil, fmt.Errorf("空のファイルは処理できません: %s", cli.config.InputPath)
 	}
@@ -448,25 +420,19 @@ func (cli *IntegratedCLI) generateOutput(results []*ProcessResult) error {
 
 	output := strings.Join(append([]string{transform.GeneratedHeader()}, outLines...), "\n") + "\n"
 
-	var w io.Writer = os.Stdout
-	if cli.config.OutputPath != "-" {
-		f, err := os.Create(cli.config.OutputPath)
-		if err != nil {
-			// Localize error messages based on error type
-			if os.IsPermission(err) {
-				return fmt.Errorf("出力ファイル書き込み失敗: 権限が不足しています: %s", cli.config.OutputPath)
-			}
-			if strings.Contains(err.Error(), "is a directory") {
-				return fmt.Errorf("出力先がディレクトリです: %s", cli.config.OutputPath)
-			}
-			return fmt.Errorf("出力ファイル作成エラー: %w", err)
+	err := cliio.WriteOutputFile(cli.config.OutputPath, output)
+	if err != nil {
+		// Handle different error types with appropriate formatting
+		if os.IsPermission(err) {
+			return fmt.Errorf("%s", cli.cliErrorFormatter.FormatFilePermission(cli.config.OutputPath, "書き込み"))
 		}
-		defer f.Close()
-		w = f
+		if strings.Contains(err.Error(), "is a directory") {
+			return fmt.Errorf("出力先がディレクトリです: %s", cli.config.OutputPath)
+		}
+		return fmt.Errorf("%s", cli.cliErrorFormatter.FormatFileWrite(cli.config.OutputPath, err))
 	}
 
-	_, err := io.WriteString(w, output)
-	return err
+	return nil
 }
 
 // performValidationOnly は検証のみを実行
@@ -767,7 +733,6 @@ var (
 	outFile     = flag.String("out", "-", "出力ファイルパス ('-'で標準出力)")
 	stats       = flag.Bool("stats", true, "変更の統計情報を標準エラー出力に表示")
 	showVersion = flag.Bool("version", false, "バージョン情報を表示")
-	showHelp    = flag.Bool("help", false, "ヘルプメッセージを表示")
 
 	// Sandbox functionality flags
 	sandboxMode = flag.Bool("sandbox", false, "サンドボックス環境での実際のコマンド実行")
@@ -789,132 +754,17 @@ var (
 
 // printHelpMessage prints help message to stdout
 func printHelpMessage() {
-	fmt.Printf(`usacloud-update v%s
-
-概要:
-  usacloud v0、v1.0、v1.1の記述が混在したbashスクリプトを、v1.1で動作するように自動変換します。
-  廃止されたオプション、変更されたリソース名、新しいコマンド引数形式などを自動更新し、
-  変換できない箇所は適切なコメントと共に手動対応を促します。
-  
-  --sandboxオプションでSakura Cloudサンドボックス環境での実際のコマンド実行が可能です。
-
-使用方法:
-  usacloud-update [オプション]
-
-基本的な使用例:
-  # パイプラインで使用
-  cat input.sh | usacloud-update > output.sh
-
-  # ファイルを指定して変換
-  usacloud-update --in script.sh --out updated_script.sh
-
-  # 変更統計のみ確認（出力は破棄）
-  usacloud-update --in script.sh --out /dev/null
-
-  # 統計出力を無効にして変換
-  usacloud-update --in script.sh --out updated.sh --stats=false
-
-サンドボックス機能の使用例:
-  # インタラクティブTUIでサンドボックス実行
-  usacloud-update --sandbox --in script.sh
-
-  # ドライランモード（実行せずに結果確認）
-  usacloud-update --sandbox --dry-run --in script.sh
-
-  # バッチモード（全コマンド自動実行）
-  usacloud-update --sandbox --batch --in script.sh
-
-  # TUIなしで直接バッチ実行
-  usacloud-update --sandbox --interactive=false --batch --in script.sh
-
-環境設定:
-  サンドボックス機能を使用するには設定ファイルまたは環境変数が必要です:
-  
-  【推奨】設定ファイル方式:
-    usacloud-update.conf.sample を参考に ~/.config/usacloud-update/usacloud-update.conf を作成
-    初回実行時に対話的に作成することも可能
-    
-    設定ファイルディレクトリのカスタマイズ:
-      USACLOUD_UPDATE_CONFIG_DIR=/path/to/config - カスタム設定ディレクトリを指定
-  
-  環境変数方式（レガシー）:
-    SAKURACLOUD_ACCESS_TOKEN、SAKURACLOUD_ACCESS_TOKEN_SECRET
-
-オプション:
-`, version)
-	flag.PrintDefaults()
-	fmt.Printf(`
-詳細な使用方法とルールについては README-Usage.md を参照してください。
-サンドボックス機能はSakura Cloudのtk1vゾーンを使用します（料金は発生しません）。
-
-困ったときは: usacloud-update --help
-`)
+	fmt.Print(helpers.GetHelpContent(version))
+	fmt.Print(helpers.GetOptionsContent())
+	fmt.Print(helpers.GetFooterContent())
 }
 
 func init() {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, `無効なオプションが指定されました。正しい使用方法については --help オプションを参照してください。
-
-usacloud-update v%s
-
-概要:
-  usacloud v0、v1.0、v1.1の記述が混在したbashスクリプトを、v1.1で動作するように自動変換します。
-  廃止されたオプション、変更されたリソース名、新しいコマンド引数形式などを自動更新し、
-  変換できない箇所は適切なコメントと共に手動対応を促します。
-  
-  --sandboxオプションでSakura Cloudサンドボックス環境での実際のコマンド実行が可能です。
-
-使用方法:
-  usacloud-update [オプション]
-
-基本的な使用例:
-  # パイプラインで使用
-  cat input.sh | usacloud-update > output.sh
-
-  # ファイルを指定して変換
-  usacloud-update --in script.sh --out updated_script.sh
-
-  # 変更統計のみ確認（出力は破棄）
-  usacloud-update --in script.sh --out /dev/null
-
-  # 統計出力を無効にして変換
-  usacloud-update --in script.sh --out updated.sh --stats=false
-
-サンドボックス機能の使用例:
-  # インタラクティブTUIでサンドボックス実行
-  usacloud-update --sandbox --in script.sh
-
-  # ドライランモード（実行せずに結果確認）
-  usacloud-update --sandbox --dry-run --in script.sh
-
-  # バッチモード（全コマンド自動実行）
-  usacloud-update --sandbox --batch --in script.sh
-
-  # TUIなしで直接バッチ実行
-  usacloud-update --sandbox --interactive=false --batch --in script.sh
-
-環境設定:
-  サンドボックス機能を使用するには設定ファイルまたは環境変数が必要です:
-  
-  【推奨】設定ファイル方式:
-    usacloud-update.conf.sample を参考に ~/.config/usacloud-update/usacloud-update.conf を作成
-    初回実行時に対話的に作成することも可能
-    
-    設定ファイルディレクトリのカスタマイズ:
-      USACLOUD_UPDATE_CONFIG_DIR=/path/to/config - カスタム設定ディレクトリを指定
-  
-  環境変数方式（レガシー）:
-    SAKURACLOUD_ACCESS_TOKEN、SAKURACLOUD_ACCESS_TOKEN_SECRET
-
-オプション:
-`, version)
-		flag.PrintDefaults()
-		fmt.Fprintf(os.Stderr, `
-詳細な使用方法とルールについては README-Usage.md を参照してください。
-サンドボックス機能はSakura Cloudのtk1vゾーンを使用します（料金は発生しません）。
-
-困ったときは: usacloud-update --help
-`)
+		fmt.Fprintf(os.Stderr, "無効なオプションが指定されました。正しい使用方法については --help オプションを参照してください。\n\n")
+		fmt.Fprint(os.Stderr, helpers.GetHelpContent(version))
+		fmt.Fprint(os.Stderr, helpers.GetOptionsContent())
+		fmt.Fprint(os.Stderr, helpers.GetFooterContent())
 	}
 }
 
@@ -965,66 +815,12 @@ func runMainLogic() {
 	}
 }
 
-// runTraditionalMode executes the original conversion logic
-func runTraditionalMode() {
-	var r io.Reader = os.Stdin
-	if *inFile != "-" {
-		f, e := os.Open(*inFile)
-		if e != nil {
-			fmt.Fprintf(os.Stderr, color.RedString("Error opening input file: %v\n"), e)
-			os.Exit(1)
-		}
-		defer f.Close()
-		r = f
-	}
-
-	scanner := bufio.NewScanner(r)
-	scanner.Buffer(make([]byte, 0, 1024*1024), 1024*1024)
-
-	eng := transform.NewDefaultEngine()
-	var outLines []string
-	for lineNum := 1; scanner.Scan(); lineNum++ {
-		line := scanner.Text()
-		res := eng.Apply(line)
-		if res.Changed {
-			for _, c := range res.Changes {
-				if *stats {
-					fmt.Fprintf(os.Stderr, color.YellowString("#L%-5d %s => %s [%s]\n"), lineNum, c.Before, c.After, c.RuleName)
-				}
-			}
-		}
-		outLines = append(outLines, res.Line)
-	}
-	if err := scanner.Err(); err != nil {
-		fmt.Fprintf(os.Stderr, color.RedString("Error reading input: %v\n"), err)
-		os.Exit(1)
-	}
-
-	output := strings.Join(append([]string{transform.GeneratedHeader()}, outLines...), "\n") + "\n"
-
-	var w io.Writer = os.Stdout
-	if *outFile != "-" {
-		f, e := os.Create(*outFile)
-		if e != nil {
-			fmt.Fprintf(os.Stderr, color.RedString("Error creating output file: %v\n"), e)
-			os.Exit(1)
-		}
-		defer f.Close()
-		w = f
-	}
-	if _, err := io.WriteString(w, output); err != nil {
-		fmt.Fprintf(os.Stderr, color.RedString("Error writing output: %v\n"), err)
-		os.Exit(1)
-	}
-}
-
 // runSandboxMode executes the new sandbox functionality
 func runSandboxMode() {
 	// Load configuration with new file-based system
 	cfg, err := config.LoadConfig(*configFile)
 	if err != nil {
-		fmt.Fprint(os.Stderr, color.RedString("Error loading configuration: %v\n"), err)
-		os.Exit(1)
+		helpers.FatalError("Error loading configuration: %v", err)
 	}
 
 	// Override config with command line flags
@@ -1042,7 +838,7 @@ func runSandboxMode() {
 
 		// Check if usacloud CLI is installed
 		if !sandbox.IsUsacloudInstalled() {
-			fmt.Fprint(os.Stderr, color.RedString("Error: usacloud CLI not found\n"))
+			helpers.PrintError("Error: usacloud CLI not found")
 			fmt.Fprintf(os.Stderr, "Please install usacloud CLI: https://docs.usacloud.jp/usacloud/installation/\n")
 			os.Exit(1)
 		}
@@ -1054,22 +850,10 @@ func runSandboxMode() {
 
 	if *inFile != "-" {
 		// Explicit file input
-		f, err := os.Open(*inFile)
+		var err error
+		lines, err = cliio.ReadFileLines(*inFile)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, color.RedString("Error opening input file: %v\n"), err)
-			os.Exit(1)
-		}
-		defer f.Close()
-
-		scanner := bufio.NewScanner(f)
-		scanner.Buffer(make([]byte, 0, 1024*1024), 1024*1024)
-
-		for scanner.Scan() {
-			lines = append(lines, scanner.Text())
-		}
-		if err := scanner.Err(); err != nil {
-			fmt.Fprintf(os.Stderr, color.RedString("Error reading input: %v\n"), err)
-			os.Exit(1)
+			helpers.FatalError("Error reading input file: %v", err)
 		}
 		inputSource = *inFile
 	} else {
@@ -1077,27 +861,21 @@ func runSandboxMode() {
 		stat, _ := os.Stdin.Stat()
 		if (stat.Mode() & os.ModeCharDevice) == 0 {
 			// Data is being piped to stdin
-			scanner := bufio.NewScanner(os.Stdin)
-			scanner.Buffer(make([]byte, 0, 1024*1024), 1024*1024)
-
-			for scanner.Scan() {
-				lines = append(lines, scanner.Text())
-			}
-			if err := scanner.Err(); err != nil {
-				fmt.Fprintf(os.Stderr, color.RedString("Error reading stdin: %v\n"), err)
-				os.Exit(1)
+			var err error
+			lines, err = cliio.ReadFileLines("-")
+			if err != nil {
+				helpers.FatalError("Error reading stdin: %v", err)
 			}
 			inputSource = "<stdin>"
 		} else {
 			// No stdin data - use file selector
 			selectedFiles, err := runFileSelector(cfg)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, color.RedString("Error in file selection: %v\n"), err)
-				os.Exit(1)
+				helpers.FatalError("Error in file selection: %v", err)
 			}
 
 			if len(selectedFiles) == 0 {
-				fmt.Fprint(os.Stderr, color.YellowString("No files selected. Exiting.\n"))
+				helpers.PrintWarning("No files selected. Exiting.")
 				os.Exit(0)
 			}
 
@@ -1108,22 +886,9 @@ func runSandboxMode() {
 			}
 
 			// Single file selected
-			f, err := os.Open(selectedFiles[0])
+			lines, err = cliio.ReadFileLines(selectedFiles[0])
 			if err != nil {
-				fmt.Fprintf(os.Stderr, color.RedString("Error opening selected file: %v\n"), err)
-				os.Exit(1)
-			}
-			defer f.Close()
-
-			scanner := bufio.NewScanner(f)
-			scanner.Buffer(make([]byte, 0, 1024*1024), 1024*1024)
-
-			for scanner.Scan() {
-				lines = append(lines, scanner.Text())
-			}
-			if err := scanner.Err(); err != nil {
-				fmt.Fprintf(os.Stderr, color.RedString("Error reading selected file: %v\n"), err)
-				os.Exit(1)
+				helpers.FatalError("Error reading selected file: %v", err)
 			}
 			inputSource = selectedFiles[0]
 		}
@@ -1190,14 +955,14 @@ func runMultiFileMode(cfg *config.SandboxConfig, filePaths []string) {
 		// Read file
 		lines, err := readFileLines(filePath)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, color.RedString("Error reading file %s: %v\n"), filePath, err)
+			helpers.PrintError("Error reading file %s: %v", filePath, err)
 			continue
 		}
 
 		// Execute
 		results, err := executor.ExecuteScript(lines)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, color.RedString("Error executing file %s: %v\n"), filePath, err)
+			helpers.PrintError("Error executing file %s: %v", filePath, err)
 			continue
 		}
 
@@ -1237,21 +1002,7 @@ func runMultiFileMode(cfg *config.SandboxConfig, filePaths []string) {
 
 // readFileLines reads a file and returns its lines
 func readFileLines(filePath string) ([]string, error) {
-	f, err := os.Open(filePath)
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
-
-	scanner := bufio.NewScanner(f)
-	scanner.Buffer(make([]byte, 0, 1024*1024), 1024*1024)
-
-	var lines []string
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-
-	return lines, scanner.Err()
+	return cliio.ReadFileLines(filePath)
 }
 
 // runInteractiveMode runs the TUI for interactive command selection and execution
