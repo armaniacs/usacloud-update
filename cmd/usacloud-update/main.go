@@ -19,7 +19,7 @@ import (
 	"github.com/fatih/color"
 )
 
-const version = "1.9.0"
+const version = "1.9.4"
 
 // ProcessResult は統合された処理結果
 type ProcessResult struct {
