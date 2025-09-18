@@ -1,10 +1,11 @@
 # Makefile for usacloud-update
 # Usage:
 #   make build         # ビルド
-#   make test          # 通常テスト（golden比較、30秒タイムアウト）
-#   make test-long     # 長時間テスト（30分タイムアウト）
+#   make test          # 通常テスト（TUI無効、golden比較、30秒タイムアウト）
+#   make test-long     # 長時間テスト（TUI無効、30分タイムアウト）
+#   make test-tui      # TUI関連テスト（インタラクティブ環境向け）
 #   make bdd           # BDDテスト（サンドボックス機能、30秒タイムアウト）
-#   make golden        # 期待値(golden)を最新出力で上書き更新
+#   make golden        # 期待値(golden)を最新出力で上書き更新（TUI無効）
 #   make verify-sample # サンプルを実行して期待値とdiff確認
 #   make install       # $GOPATH/bin にインストール
 #   make uninstall     # $GOPATH/bin から削除
@@ -29,7 +30,7 @@ IN_MIXED   := testdata/mixed_with_non_usacloud.sh
 OUT_MIXED  := /tmp/out_mixed.sh
 GOLDEN_MIXED := testdata/expected_mixed_non_usacloud.sh
 
-.PHONY: all build run test test-long bdd golden verify-sample verify-mixed install uninstall tidy fmt vet clean
+.PHONY: all build run test test-long test-tui bdd golden verify-sample verify-mixed install uninstall tidy fmt vet clean
 
 all: build
 
@@ -40,11 +41,15 @@ run: build
 	$(BIN_DIR)/$(BINARY) --in $(IN_SAMPLE) --out $(OUT_SAMPLE)
 
 test:
-	$(GO) test -timeout $(TEST_TIMEOUT) $(PKGS)
+	USACLOUD_UPDATE_NO_TUI=true $(GO) test -timeout $(TEST_TIMEOUT) $(PKGS)
 
 # 長時間テスト用（30分タイムアウト）
 test-long:
-	$(GO) test -timeout 1800s $(PKGS)
+	USACLOUD_UPDATE_NO_TUI=true $(GO) test -timeout 1800s $(PKGS)
+
+# TUI関連テスト（インタラクティブ環境向け）
+test-tui:
+	$(GO) test -timeout $(TEST_TIMEOUT) -run TUI $(PKGS)
 
 # BDD機能テスト（サンドボックス機能のBDD）
 bdd:
@@ -52,7 +57,7 @@ bdd:
 
 # Goldenファイル(期待値)を「仕様変更後の正しい出力」で更新
 golden:
-	$(GO) test -timeout $(TEST_TIMEOUT) -run Golden -update $(PKGS)
+	USACLOUD_UPDATE_NO_TUI=true $(GO) test -timeout $(TEST_TIMEOUT) -run Golden -update $(PKGS)
 
 # サンプル入力を変換して期待値と比較（手元確認）
 verify-sample: run

@@ -19,7 +19,75 @@ import (
 	"github.com/fatih/color"
 )
 
-const version = "1.9.4"
+const version = "1.9.6"
+
+// shouldStartTUI determines if TUI should be started based on arguments and stdin
+func shouldStartTUI() bool {
+	// テスト環境での制御
+	if os.Getenv("USACLOUD_UPDATE_NO_TUI") == "true" {
+		return false
+	}
+
+	// 既存のTEST_STDIN_TIMEOUT との互換性維持
+	if os.Getenv("TEST_STDIN_TIMEOUT") == "true" {
+		return false
+	}
+
+	// CI環境の検出
+	if os.Getenv("CI") == "true" {
+		return false
+	}
+
+	// 引数が実行ファイル名のみかチェック
+	if len(os.Args) != 1 {
+		return false
+	}
+
+	// 標準入力にデータがないかチェック（パイプライン以外）
+	stat, err := os.Stdin.Stat()
+	if err != nil {
+		return false
+	}
+
+	// パイプライン入力がある場合はTUIを起動しない
+	if (stat.Mode() & os.ModeCharDevice) == 0 {
+		return false
+	}
+
+	return true
+}
+
+// runTUIMode runs the TUI file selector with default settings
+func runTUIMode() {
+	// デフォルト設定でTUIを起動
+	cfg := &config.SandboxConfig{
+		AccessToken:       "",
+		AccessTokenSecret: "",
+		Zone:              "tk1v",
+		APIEndpoint:       "https://secure.sakura.ad.jp/cloud/zone/tk1v/api/cloud/1.1/",
+		Enabled:           true,
+		Interactive:       true,
+	}
+
+	selectedFiles, err := runFileSelector(cfg)
+	if err != nil {
+		// TUI起動失敗時のフォールバック
+		printHelpMessage()
+		return
+	}
+
+	if len(selectedFiles) == 0 {
+		// ファイル未選択時のフォールバック
+		printHelpMessage()
+		return
+	}
+
+	// 選択されたファイルがあれば、変換処理を実行
+	for _, file := range selectedFiles {
+		fmt.Printf("Processing file: %s\n", file)
+		// TODO: 実際の変換処理呼び出し
+	}
+}
 
 // ProcessResult は統合された処理結果
 type ProcessResult struct {
@@ -1115,6 +1183,14 @@ func detectStdinInput(timeout time.Duration) bool {
 
 // main function using cobra
 func main() {
+	// PBI-033: TUIデフォルトモード撤回 (v1.9.6)
+	// インタラクティブTUIデフォルトモードを無効化
+	// if os.Getenv("TEST_STDIN_TIMEOUT") != "true" && shouldStartTUI() {
+	//     // TUIモードで起動
+	//     runTUIMode()
+	//     return
+	// }
+
 	// Check for stdin timeout only if no arguments provided
 	if len(os.Args) == 1 {
 		// Check for input with 2-second timeout

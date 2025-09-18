@@ -2,12 +2,21 @@ package tui
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/armaniacs/usacloud-update/internal/config"
 	"github.com/armaniacs/usacloud-update/internal/scanner"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
+)
+
+// Preview display constants for PBI-034
+const (
+	MinPreviewLines = 10  // 最小表示行数
+	MaxPreviewLines = 100 // 最大表示行数
+	HeaderLines     = 10  // ヘッダー情報の行数
+	MarginLines     = 2   // 余白の行数
 )
 
 // FileSelector represents a file selection TUI
@@ -19,11 +28,12 @@ type FileSelector struct {
 	selectedFiles []string
 
 	// UI components
-	fileList    *tview.List
-	previewPane *tview.TextView
-	statusBar   *tview.TextView
-	helpText    *tview.TextView
-	mainGrid    *tview.Grid
+	fileList      *tview.List
+	previewPane   *tview.TextView
+	statusBar     *tview.TextView
+	helpText      *tview.TextView
+	previewNotice *tview.TextView
+	mainGrid      *tview.Grid
 
 	// State
 	helpVisible bool
@@ -83,6 +93,7 @@ func (fs *FileSelector) setupUI() {
 	fs.setupPreviewPane()
 	fs.setupStatusBar()
 	fs.setupHelpText()
+	fs.setupPreviewNotice()
 	fs.setupLayout()
 	fs.setupKeyBindings()
 }
@@ -132,6 +143,14 @@ func (fs *FileSelector) setupHelpText() {
 	fs.helpText.SetTitle("❓ Help").SetBorder(true)
 }
 
+// setupPreviewNotice initializes the preview notice text
+func (fs *FileSelector) setupPreviewNotice() {
+	fs.previewNotice = tview.NewTextView().
+		SetText("[black:yellow:b] TUIはPreviewとして提供中 [::-]").
+		SetTextAlign(tview.AlignCenter).
+		SetDynamicColors(true)
+}
+
 // setupLayout creates the main layout
 func (fs *FileSelector) setupLayout() {
 	// Create main grid layout
@@ -148,24 +167,26 @@ func (fs *FileSelector) updateLayout() {
 	fs.mainGrid.Clear()
 
 	if fs.helpVisible {
-		// Layout with help: Main content, status bar, help
-		fs.mainGrid.SetRows(0, 1, 4).
+		// Layout with help: Main content, status bar, help, preview notice
+		fs.mainGrid.SetRows(0, 1, 4, 1).
 			SetColumns(0, 0).
 			SetBorders(false)
 
 		fs.mainGrid.AddItem(fs.fileList, 0, 0, 1, 1, 0, 0, true).
 			AddItem(fs.previewPane, 0, 1, 1, 1, 0, 0, false).
 			AddItem(fs.statusBar, 1, 0, 1, 2, 0, 0, false).
-			AddItem(fs.helpText, 2, 0, 1, 2, 0, 0, false)
+			AddItem(fs.helpText, 2, 0, 1, 2, 0, 0, false).
+			AddItem(fs.previewNotice, 3, 0, 1, 2, 0, 0, false)
 	} else {
-		// Layout without help: Main content, status bar
-		fs.mainGrid.SetRows(0, 1).
+		// Layout without help: Main content, status bar, preview notice
+		fs.mainGrid.SetRows(0, 1, 1).
 			SetColumns(0, 0).
 			SetBorders(false)
 
 		fs.mainGrid.AddItem(fs.fileList, 0, 0, 1, 1, 0, 0, true).
 			AddItem(fs.previewPane, 0, 1, 1, 1, 0, 0, false).
-			AddItem(fs.statusBar, 1, 0, 1, 2, 0, 0, false)
+			AddItem(fs.statusBar, 1, 0, 1, 2, 0, 0, false).
+			AddItem(fs.previewNotice, 2, 0, 1, 2, 0, 0, false)
 	}
 }
 
@@ -318,24 +339,52 @@ func (fs *FileSelector) updatePreview(file *scanner.FileInfo) {
 	content.WriteString("\n[yellow]Preview:[white]\n")
 	content.WriteString("[gray]" + strings.Repeat("─", 50) + "[white]\n")
 
-	// File preview
-	preview, err := file.Preview(15)
+	// File preview with dynamic line calculation
+	dynamicLines := fs.calculateDynamicPreviewLines()
+	preview, err := file.Preview(dynamicLines)
 	if err != nil {
 		content.WriteString(fmt.Sprintf("[red]Error reading file: %v[white]\n", err))
 	} else {
 		for i, line := range preview {
-			if i >= 15 { // Limit preview lines
+			if i >= dynamicLines { // Limit preview lines dynamically
 				break
 			}
 			content.WriteString(fmt.Sprintf("%s\n", line))
 		}
 
-		if len(preview) == 15 {
-			content.WriteString("[gray]... (truncated)[white]\n")
+		// Show truncated message only if file has more content than displayed
+		if len(preview) == dynamicLines {
+			// Check if file actually has more lines
+			fileContent, readErr := os.ReadFile(file.Path)
+			if readErr == nil {
+				totalLines := len(strings.Split(string(fileContent), "\n"))
+				if totalLines > dynamicLines {
+					content.WriteString("[gray]... (truncated)[white]\n")
+				}
+			}
 		}
 	}
 
 	fs.previewPane.SetText(content.String())
+}
+
+// calculateDynamicPreviewLines calculates optimal preview lines based on available height
+func (fs *FileSelector) calculateDynamicPreviewLines() int {
+	// Get the actual height of the preview pane
+	_, _, _, height := fs.previewPane.GetRect()
+
+	// Calculate available lines for content
+	availableLines := height - HeaderLines - MarginLines
+
+	// Apply min/max constraints
+	if availableLines < MinPreviewLines {
+		availableLines = MinPreviewLines
+	}
+	if availableLines > MaxPreviewLines {
+		availableLines = MaxPreviewLines
+	}
+
+	return availableLines
 }
 
 // updateStatusBar updates the status bar text

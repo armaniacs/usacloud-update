@@ -388,8 +388,8 @@ func TestConstants(t *testing.T) {
 	}
 
 	// Should be current version
-	if version != "1.9.4" {
-		t.Errorf("Expected version 1.9.4, got %s", version)
+	if version != "1.9.6" {
+		t.Errorf("Expected version 1.9.6, got %s", version)
 	}
 }
 

@@ -49,3 +49,5 @@ CLAUDE.md
 *.claude/*.local.*
 *.swp
 .serena/
+
+temp/
